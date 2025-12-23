@@ -1,0 +1,9 @@
+[submodule "mCRL2"]
+	path = mCRL2
+	url = https://github.com/mCRL2org/mCRL2
+[submodule "ltsinfo"]
+	path = ltsinfo
+	url = https://github.com/MERCorg/ltsinfo
+[submodule "ltsmin"]
+	path = ltsmin
+	url = https://github.com/utwente-fmt/ltsmin
