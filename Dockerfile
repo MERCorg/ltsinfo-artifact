@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
  python3-psutil \ 
  z3 \
 # Dependencies for ltsmin.
- ant-lib \
+ ant \
  autoconf \
  automake \
  bison \
@@ -21,12 +21,13 @@ RUN apt-get update && apt-get install -y \
  flex \
  file \
  libtool \
- libtool-ltdl-devel \
  pkgconf \
- popt-devel \
- zlib-devel \
+ libpopt-dev \
+ zlib1g-dev \
 # Requires to install Rust
- curl
+ curl \
+# Required to unpack the LTSs
+ bzip2 
  
 # Build mCRL2 from source
 COPY ./mCRL2 /root/mCRL2/
@@ -35,11 +36,12 @@ COPY ./mCRL2 /root/mCRL2/
 RUN mkdir ~/mCRL2/build && cd ~/mCRL2/build && cmake . \
  -DCMAKE_BUILD_TYPE=RELEASE \
  -DMCRL2_ENABLE_GUI_TOOLS=OFF \
+ -DMCRL2_PACKAGE_RELEASE=ON \
  ~/mCRL2
 
 # Build the toolset and install it such that the tools are available on the PATH
 ARG THREADS=8
-RUN cd ~/mCRL2/build && make -j${THREADS} && make install
+RUN cd ~/mCRL2/build && make -j${THREADS} ltsconvert
 
 # Build ltsmin from source
 COPY ./ltsmin /root/ltsmin/
@@ -49,7 +51,7 @@ RUN cd ~/ltsmin \
     && ./ltsminreconf \
     && ./configure --disable-dependency-tracking \
     && cd ~/ltsmin \
-    && make -j${THREADS} install
+    && make -j${THREADS}
 
 # Install Rust for building ltsinfo
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -57,8 +59,14 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 # Build ltsinfo from source
 COPY ./ltsinfo /root/ltsinfo/
 
+ARG THREADS=8
+ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cd ~/ltsinfo/ \
-    && cargo build --release
+    && cargo build --release -j${THREADS}
 
 # Copy the LTSs into the container
 COPY ./lts/ /root/lts/
+
+# Copy the scripts
+COPY ./scripts/ /root/scripts/
+RUN scripts/unpack.sh
