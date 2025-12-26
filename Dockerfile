@@ -26,31 +26,35 @@ RUN apt-get update && apt-get install -y \
  zlib1g-dev \
 # Requires to install Rust
  curl \
-# Required to unpack the LTSs
- bzip2 
+# Requires to fix the bash shebangs
+ dos2unix
  
 # Build mCRL2 from source
 COPY ./mCRL2 /root/mCRL2/
 
 # Configure build
-RUN mkdir ~/mCRL2/build && cd ~/mCRL2/build && cmake . \
+RUN mkdir /root/mCRL2/build && cd /root/mCRL2/build && cmake . \
  -DCMAKE_BUILD_TYPE=RELEASE \
  -DMCRL2_ENABLE_GUI_TOOLS=OFF \
  -DMCRL2_PACKAGE_RELEASE=ON \
- ~/mCRL2
+ /root/mCRL2
 
 # Build the toolset and install it such that the tools are available on the PATH
 ARG THREADS=8
-RUN cd ~/mCRL2/build && make -j${THREADS} ltsconvert
+RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert
 
 # Build ltsmin from source
 COPY ./ltsmin /root/ltsmin/
 
-# Build the ltsmin toolset.
-RUN cd ~/ltsmin \
+# Build the ltsmin toolset, we create an empty .git directory for the build system to be happy
+RUN cd /root/ltsmin/ \
+    && mkdir .git \
+    && find . -type f -print0 | xargs -0 dos2unix \
     && ./ltsminreconf \
-    && ./configure --disable-dependency-tracking \
-    && cd ~/ltsmin \
+    && ./configure --disable-dependency-tracking
+
+ARG THREADS=8
+RUN cd /root/ltsmin \
     && make -j${THREADS}
 
 # Install Rust for building ltsinfo
@@ -61,7 +65,7 @@ COPY ./ltsinfo /root/ltsinfo/
 
 ARG THREADS=8
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN cd ~/ltsinfo/ \
+RUN cd /root/ltsinfo/ \
     && cargo build --release -j${THREADS}
 
 # Copy the LTSs into the container
