@@ -4,6 +4,9 @@ import argparse
 import subprocess
 import os
 
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+
+
 def generate_example(script_name: str, output_file: str, size: int):
     """Generates the example LTSs"""
 
@@ -16,7 +19,7 @@ def generate_example(script_name: str, output_file: str, size: int):
         print(f"Generating {output_file} using {script_name}")
 
         subprocess.run(
-            ["python", script_name, str(size)],
+            ["python3", script_name, str(size)],
             stdout=f,
             stderr=subprocess.STDOUT,
             check=True,
@@ -37,14 +40,25 @@ def main():
     )
     args = args.parse_args()
 
-
     for size in [10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000]:
-        generate_example("gen_example_A.py", f"{args.output_dir}/example_A", size)
+        generate_example(
+            os.path.join(SCRIPT_DIR, "gen_example_A.py"),
+            os.path.join(args.output_dir, "example_A"),
+            size,
+        )
 
     for size in [1000, 1500, 2000, 2500, 3000]:
-        generate_example("gen_example_B.py", f"{args.output_dir}/example_B", size)
+        generate_example(
+            os.path.join(SCRIPT_DIR, "gen_example_B.py"),
+            os.path.join(args.output_dir, "example_B"),
+            size,
+        )
     for size in [16, 20, 24, 28, 32]:
-        generate_example("gen_example_fib.py", f"{args.output_dir}/example_fib", size)
+        generate_example(
+            os.path.join(SCRIPT_DIR, "gen_example_fib.py"),
+            os.path.join(args.output_dir, "example_fib"),
+            size,
+        )
 
 
 if __name__ == "__main__":

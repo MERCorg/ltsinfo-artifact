@@ -73,4 +73,7 @@ COPY ./lts/ /root/lts/
 
 # Copy the scripts
 COPY ./scripts/ /root/scripts/
-RUN scripts/unpack.sh
+
+# Run the preparation scripts
+RUN python3 /root/scripts/unpack.py /root/lts/
+RUN python3 /root/scripts/generate_examples.py /root/lts/
