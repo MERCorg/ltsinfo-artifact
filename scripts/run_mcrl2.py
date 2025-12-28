@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 from library import run_experiment
@@ -14,6 +15,7 @@ SCC_REGEX = re.compile(r".*scc_reduce: (\d*\.\d*)s.*")
 QUOTIENT_REGEX = re.compile(r".*quotient: (\d*\.\d*)s.*")
 PREPROCESS_REGEX = re.compile(r".*preprocess: (\d*\.\d*)s.*")
 
+
 def main():
     # Parse some configuration options
     parser = argparse.ArgumentParser(
@@ -23,7 +25,7 @@ def main():
 
     parser.add_argument(
         dest="lts_dir",
-        type=str,
+        type=Path,
         default="lts",
         help="Directory that contains the LTS files to benchmark",
     )
@@ -31,24 +33,34 @@ def main():
         dest="ltsconvert_binpath", action="store", type=str, required=True
     )
     parser.add_argument(
-        dest="num-runs", action="store", type=int,
-        help="Number of runs to perform for each algorithm"
+        dest="runs",
+        action="store",
+        type=int,
+        help="Number of runs to perform for each algorithm",
     )
 
     args = parser.parse_args()
-    os.environ["PATH"] = args.ltsconvert_binpath.strip() + os.pathsep + os.environ["PATH"]
-    ltsconvert_exe = shutil.which("ltsconvert")
+    ltsconvert_bin = shutil.which("ltsconvert", args.ltsconvert_binpath)
 
     for alg in ["branching-bisim"]:
         os.makedirs(os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}"), exist_ok=True)
 
-        for run in range(1, args.num_runs + 1):
+        for run in range(1, args.runs + 1):
             for file in args.lts_dir.glob("*.aut"):
                 print(f"Run {run}: Benchmarking {file} with ltsconvert {alg}")
-                (output, time, memory) = run_experiment([ltsconvert_exe, "-e", alg, "--tau=i", "--timings", os.path.join(SCRIPT_PATH, "lts", file), 
-                                                        os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}", file)])
-                run_result = {"total_time": time, "memory": memory, "output": output}
-            
+                (output, time, memory) = run_experiment(
+                    [
+                        ltsconvert_bin,
+                        "-e",
+                        alg,
+                        "--tau=i",
+                        "--timings",
+                        os.path.join(SCRIPT_PATH, "lts", file),
+                        os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}", file),
+                    ]
+                )
+                run_result = {"file": str(file), "total_time": time, "memory": memory, "output": output}
+
                 for line in output:
                     result = TIMING_REGEX.match(line)
                     if result is not None:
@@ -64,14 +76,17 @@ def main():
                     if result is not None:
                         time = float(result.group(1))
                         run_result["preprocess_time"] = time
-                        
+
                 print(run_result)
-                result = {}
-                result[file] = run_result
 
                 # writing the dictionary data into the corresponding JSON file
-                with open(os.path.join("results", f"ltsconvert_{alg}.json"), "a", encoding="utf-8") as json_file:
-                    json.dump(result, json_file, indent=2)
+                with open(
+                    f"ltsconvert_{alg}.json",
+                    "a",
+                    encoding="utf-8",
+                ) as json_file:
+                    json.dump(run_result, json_file)
+
 
 if __name__ == "__main__":
     main()

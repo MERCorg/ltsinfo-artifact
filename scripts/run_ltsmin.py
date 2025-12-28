@@ -26,7 +26,7 @@ def main():
 
     parser.add_argument(
         dest="lts_dir",
-        type=str,
+        type=Path,
         default="lts",
         help="Directory that contains the LTS files to benchmark",
     )
@@ -35,7 +35,7 @@ def main():
         dest="ltsmin_binpath", action="store", type=str
     )
     parser.add_argument(
-        dest="num-runs", action="store", type=int,
+        dest="runs", action="store", type=int,
         help="Number of runs to execute",
     )
 
@@ -61,6 +61,7 @@ def main():
                     ]
                 )
                 run_result = {
+                    "file": str(file),
                     "total_time": time,
                     "memory": memory,
                     "output": output,
@@ -94,16 +95,14 @@ def main():
                         run_result["reduction"] = end_time - begin_time
 
                 print(run_result)
-                result = {}
-                result[file] = run_result
 
                 # Add run number suffix to the result file name
                 with open(
-                    os.path.join("results", f"ltsmin_{alg}.json"),
+                    f"ltsmin_{alg}.json",
                     "a",
                     encoding="utf-8",
                 ) as json_file:
-                    json.dump(result, json_file)
+                    json.dump(run_result, json_file)
 
 
 if __name__ == "__main__":
