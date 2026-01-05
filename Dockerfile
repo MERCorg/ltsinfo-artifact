@@ -68,15 +68,8 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN cd /root/ltsinfo/ \
     && cargo build --release -j${THREADS}
 
-# Copy the LTSs into the container
-COPY ./lts/ /root/lts/
-
 # Copy the scripts
 COPY ./scripts/ /root/scripts/
 
 # Run the preparation scripts
-RUN python3 /root/scripts/unpack.py /root/lts/
 RUN python3 /root/scripts/generate_examples.py /root/lts/
-
-RUN python3 /root/scripts/run_ltsmin.py /root/lts/ /root/ltsmin/src/ltsmin-reduce/ 5
-RUN python3 /root/scripts/run_mcrl2.py /root/lts/ /root/mCRL2/build/stage/bin/ 5
