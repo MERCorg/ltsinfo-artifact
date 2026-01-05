@@ -43,7 +43,7 @@ def main():
     os.environ["PATH"] = args.ltsmin_binpath.strip() + os.pathsep + os.environ["PATH"]
     ltsmin_exe = shutil.which("ltsmin-reduce")
 
-    for run in range(1, args.runs + 1):
+    for run in range(1, args.runs):
         for alg in ["branching-bisim"]:
             os.makedirs(os.path.join(SCRIPT_PATH, f"ltsmin_{alg}"), exist_ok=True)
 

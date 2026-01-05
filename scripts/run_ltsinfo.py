@@ -10,16 +10,16 @@ from library import run_experiment
 
 SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
 
-TIMING_REGEX = re.compile(r".*reduction: (\d*\.\d*)s.*")
-SCC_REGEX = re.compile(r".*scc_reduce: (\d*\.\d*)s.*")
-QUOTIENT_REGEX = re.compile(r".*quotient: (\d*\.\d*)s.*")
-PREPROCESS_REGEX = re.compile(r".*preprocess: (\d*\.\d*)s.*")
+TIMING_REGEX = re.compile(r"Time reduction: (\d*\.\d*)s.*")
+SCC_REGEX = re.compile(r"Time scc_reduce: (\d*\.\d*)s.*")
+QUOTIENT_REGEX = re.compile(r"Time quotient: (\d*\.\d*)s.*")
+PREPROCESS_REGEX = re.compile(r"Time preprocess: (\d*\.\d*)s.*")
 
 
 def main():
     # Parse some configuration options
     parser = argparse.ArgumentParser(
-        prog="run_mcrl2.py",
+        prog="run_mcrl2rust.py",
         epilog="",
     )
 
@@ -29,37 +29,38 @@ def main():
         default="lts",
         help="Directory that contains the LTS files to benchmark",
     )
+
+    parser.add_argument(dest="ltsinfo_binpath", action="store", type=str, required=True)
     parser.add_argument(
-        dest="ltsconvert_binpath", action="store", type=str, required=True
-    )
-    parser.add_argument(
-        dest="runs",
+        dest="num_runs",
         action="store",
         type=int,
-        help="Number of runs to perform for each algorithm",
+        default=1,
+        help="Number of runs to perform for each benchmark",
     )
 
     args = parser.parse_args()
-    ltsconvert_bin = shutil.which("ltsconvert", args.ltsconvert_binpath)
+    os.environ["PATH"] = args.ltsinfo_binpath.strip() + os.pathsep + os.environ["PATH"]
+    ltsinfo_exe = shutil.which("ltsinfo")
 
     for alg in ["branching-bisim"]:
-        os.makedirs(os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}"), exist_ok=True)
+        # Time the Rust implementation.
+        os.makedirs(os.path.join(SCRIPT_PATH, f"mcrl2rust_{alg}"), exist_ok=True)
 
-        for run in range(1, args.runs):
+        for run in range(1, args.num_runs):
             for file in args.lts_dir.glob("*.aut"):
-                print(f"Run {run}: Benchmarking {file} with ltsconvert {alg}")
+                print(f"Run {run}: Benchmarking {file} with ltsinfo {alg}")
                 (output, time, memory) = run_experiment(
                     [
-                        ltsconvert_bin,
-                        "-e",
+                        ltsinfo_exe,
                         alg,
                         "--tau=i",
-                        "--timings",
+                        "--time",
                         os.path.join(SCRIPT_PATH, "lts", file),
-                        os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}", file),
+                        os.path.join(SCRIPT_PATH, f"mcrl2rust_{alg}", file),
                     ]
                 )
-                run_result = {"file": str(file), "total_time": time, "memory": memory, "output": output}
+                run_result = {"total_time": time, "memory": memory, "output": output}
 
                 for line in output:
                     result = TIMING_REGEX.match(line)
@@ -72,6 +73,11 @@ def main():
                         time = float(result.group(1))
                         run_result["scc_time"] = time
 
+                    result = QUOTIENT_REGEX.match(line)
+                    if result is not None:
+                        time = float(result.group(1))
+                        run_result["quotient_time"] = time
+
                     result = PREPROCESS_REGEX.match(line)
                     if result is not None:
                         time = float(result.group(1))
@@ -79,9 +85,9 @@ def main():
 
                 print(run_result)
 
-                # writing the dictionary data into the corresponding JSON file
+                # Add run number suffix to the result file name
                 with open(
-                    f"ltsconvert_{alg}.json",
+                    f"ltsinfo_{alg}.json",
                     "a",
                     encoding="utf-8",
                 ) as json_file:
