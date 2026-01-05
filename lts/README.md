@@ -1,1 +1,0 @@
-The benchmark files are stored in this directory. They are compressed with `bzip2` to save space.
