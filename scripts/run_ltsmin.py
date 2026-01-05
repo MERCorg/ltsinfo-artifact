@@ -30,7 +30,6 @@ def main():
         default="lts",
         help="Directory that contains the LTS files to benchmark",
     )
-
     parser.add_argument(
         dest="ltsmin_binpath", action="store", type=str
     )
@@ -38,14 +37,15 @@ def main():
         dest="runs", action="store", type=int,
         help="Number of runs to execute",
     )
+    parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
     os.environ["PATH"] = args.ltsmin_binpath.strip() + os.pathsep + os.environ["PATH"]
     ltsmin_exe = shutil.which("ltsmin-reduce")
 
-    for run in range(1, args.runs):
+    for run in range(0, args.runs):
         for alg in ["branching-bisim"]:
-            os.makedirs(os.path.join(SCRIPT_PATH, f"ltsmin_{alg}"), exist_ok=True)
+            os.makedirs(os.path.join(args.output_dir, f"ltsmin_{alg}"), exist_ok=True)
 
             for file in args.lts_dir.glob("*.aut"):
                 print(f"Run {run}: Benchmarking {file} with ltsmin_reduce {alg}")
@@ -98,7 +98,7 @@ def main():
 
                 # Add run number suffix to the result file name
                 with open(
-                    f"ltsmin_{alg}.json",
+                    os.path.join(args.output_dir, f"ltsmin_{alg}.json"),
                     "a",
                     encoding="utf-8",
                 ) as json_file:

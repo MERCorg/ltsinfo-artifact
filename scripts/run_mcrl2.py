@@ -22,7 +22,6 @@ def main():
         prog="run_mcrl2.py",
         epilog="",
     )
-
     parser.add_argument(
         dest="lts_dir",
         type=Path,
@@ -38,16 +37,17 @@ def main():
         type=int,
         help="Number of runs to perform for each algorithm",
     )
+    parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
     ltsconvert_bin = shutil.which("ltsconvert", args.ltsconvert_binpath)
 
     for alg in ["branching-bisim"]:
-        os.makedirs(os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}"), exist_ok=True)
+        os.makedirs(os.path.join(args.output_dir, f"mcrl2_{alg}"), exist_ok=True)
 
         for run in range(1, args.runs):
             for file in args.lts_dir.glob("*.aut"):
-                print(f"Run {run}: Benchmarking {file} with ltsconvert {alg}")
+                print(f"Run {run}: Benchmarking {file} with mcrl2 {alg}")
                 (output, time, memory) = run_experiment(
                     [
                         ltsconvert_bin,
@@ -56,7 +56,7 @@ def main():
                         "--tau=i",
                         "--timings",
                         os.path.join(SCRIPT_PATH, "lts", file),
-                        os.path.join(SCRIPT_PATH, f"ltsconvert_{alg}", file),
+                        os.path.join(args.output_dir, f"mcrl2_{alg}", file),
                     ]
                 )
                 run_result = {"file": str(file), "total_time": time, "memory": memory, "output": output}
@@ -81,7 +81,7 @@ def main():
 
                 # writing the dictionary data into the corresponding JSON file
                 with open(
-                    f"ltsconvert_{alg}.json",
+                    os.path.join(args.output_dir, f"mcrl2_{alg}.json"),
                     "a",
                     encoding="utf-8",
                 ) as json_file:

@@ -29,8 +29,7 @@ def main():
         default="lts",
         help="Directory that contains the LTS files to benchmark",
     )
-
-    parser.add_argument(dest="ltsinfo_binpath", action="store", type=str, required=True)
+    parser.add_argument(dest="ltsinfo_binpath", action="store", type=str)
     parser.add_argument(
         dest="num_runs",
         action="store",
@@ -38,6 +37,7 @@ def main():
         default=1,
         help="Number of runs to perform for each benchmark",
     )
+    parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
     os.environ["PATH"] = args.ltsinfo_binpath.strip() + os.pathsep + os.environ["PATH"]
@@ -45,9 +45,9 @@ def main():
 
     for alg in ["branching-bisim"]:
         # Time the Rust implementation.
-        os.makedirs(os.path.join(SCRIPT_PATH, f"mcrl2rust_{alg}"), exist_ok=True)
+        os.makedirs(os.path.join(args.output_dir, f"ltsinfo_{alg}"), exist_ok=True)
 
-        for run in range(1, args.num_runs):
+        for run in range(0, args.num_runs):
             for file in args.lts_dir.glob("*.aut"):
                 print(f"Run {run}: Benchmarking {file} with ltsinfo {alg}")
                 (output, time, memory) = run_experiment(
@@ -57,7 +57,7 @@ def main():
                         "--tau=i",
                         "--time",
                         os.path.join(SCRIPT_PATH, "lts", file),
-                        os.path.join(SCRIPT_PATH, f"mcrl2rust_{alg}", file),
+                        os.path.join(args.output_dir, f"ltsinfo_{alg}", file),
                     ]
                 )
                 run_result = {"total_time": time, "memory": memory, "output": output}
@@ -87,7 +87,7 @@ def main():
 
                 # Add run number suffix to the result file name
                 with open(
-                    f"ltsinfo_{alg}.json",
+                    os.path.join(args.output_dir, f"ltsinfo_{alg}.json"),
                     "a",
                     encoding="utf-8",
                 ) as json_file:
