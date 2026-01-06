@@ -56,7 +56,7 @@ def main():
                         "--tau=i",
                         "--timings",
                         os.path.join(SCRIPT_PATH, "lts", file),
-                        os.path.join(args.output_dir, f"mcrl2_{alg}", file),
+                        os.path.join(args.output_dir, f"mcrl2_{alg}", os.path.basename(file)),
                     ]
                 )
                 run_result = {"file": str(file), "total_time": time, "memory": memory, "output": output}
@@ -86,6 +86,7 @@ def main():
                     encoding="utf-8",
                 ) as json_file:
                     json.dump(run_result, json_file)
+                    json_file.write("\n")
 
 
 if __name__ == "__main__":
