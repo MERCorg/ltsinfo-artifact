@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["encoding_size","read_u64_variablelength","write_u64_variablelength"]};

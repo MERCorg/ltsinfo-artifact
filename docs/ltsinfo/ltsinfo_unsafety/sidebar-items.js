@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Edge"],"fn":["index_edge"],"struct":["AllocCounter"]};

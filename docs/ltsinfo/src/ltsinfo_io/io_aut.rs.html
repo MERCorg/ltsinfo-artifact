@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates\io\src\io_aut.rs`."><title>io_aut.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="ltsinfo_io" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../static.files/storage-82c7156e.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">ltsinfo_io/</div>io_aut.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::collections::HashMap;
+<a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::error::Error;
+<a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>std::io::Read;
+<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::io::Write;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>std::time::Instant;
+<a href=#6 id=6 data-nosnippet>6</a>
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>log::debug;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>log::trace;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>regex::Regex;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>streaming_iterator::StreamingIterator;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>thiserror::Error;
+<a href=#12 id=12 data-nosnippet>12</a>
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>ltsinfo_lts::LabelIndex;
+<a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>ltsinfo_lts::LabelledTransitionSystem;
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>ltsinfo_lts::CompactTransition;
+<a href=#16 id=16 data-nosnippet>16</a>
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::line_iterator::LineIterator;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::progress::Progress;
+<a href=#19 id=19 data-nosnippet>19</a>
+<a href=#20 id=20 data-nosnippet>20</a><span class="attr">#[derive(Error, Debug)]
+<a href=#21 id=21 data-nosnippet>21</a></span><span class="kw">pub enum </span>IOError {
+<a href=#22 id=22 data-nosnippet>22</a>    <span class="attr">#[error(<span class="string">"Invalid .aut header {0}"</span>)]
+<a href=#23 id=23 data-nosnippet>23</a>    </span>InvalidHeader(<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str),
+<a href=#24 id=24 data-nosnippet>24</a>
+<a href=#25 id=25 data-nosnippet>25</a>    <span class="attr">#[error(<span class="string">"Invalid transition line"</span>)]
+<a href=#26 id=26 data-nosnippet>26</a>    </span>InvalidTransition(),
+<a href=#27 id=27 data-nosnippet>27</a>}
+<a href=#28 id=28 data-nosnippet>28</a>
+<a href=#29 id=29 data-nosnippet>29</a><span class="doccomment">///     `(&lt;from&gt;: Nat, "&lt;label&gt;": Str, &lt;to&gt;: Nat)`
+<a href=#30 id=30 data-nosnippet>30</a>///     `(&lt;from&gt;: Nat, &lt;label&gt;: Str, &lt;to&gt;: Nat)`
+<a href=#31 id=31 data-nosnippet>31</a></span><span class="kw">fn </span>read_transition(input: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;(<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>str), Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+<a href=#32 id=32 data-nosnippet>32</a>    <span class="kw">let </span>start_paren = input.find(<span class="string">'('</span>).ok_or(IOError::InvalidTransition())<span class="question-mark">?</span>;
+<a href=#33 id=33 data-nosnippet>33</a>    <span class="kw">let </span>start_comma = input.find(<span class="string">','</span>).ok_or(IOError::InvalidTransition())<span class="question-mark">?</span>;
+<a href=#34 id=34 data-nosnippet>34</a>
+<a href=#35 id=35 data-nosnippet>35</a>    <span class="comment">// Find the comma in the second part
+<a href=#36 id=36 data-nosnippet>36</a>    </span><span class="kw">let </span>start_second_comma = input.rfind(<span class="string">','</span>).ok_or(IOError::InvalidTransition())<span class="question-mark">?</span>;
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">let </span>end_paren = input.rfind(<span class="string">')'</span>).ok_or(IOError::InvalidTransition())<span class="question-mark">?</span>;
+<a href=#38 id=38 data-nosnippet>38</a>
+<a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">let </span>from = <span class="kw-2">&amp;</span>input[start_paren+<span class="number">1</span>..start_comma].trim();
+<a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">let </span>label = <span class="kw-2">&amp;</span>input[start_comma+<span class="number">1</span>..start_second_comma].trim();
+<a href=#41 id=41 data-nosnippet>41</a>    <span class="kw">let </span>to = <span class="kw-2">&amp;</span>input[start_second_comma+<span class="number">1</span>..end_paren].trim();
+<a href=#42 id=42 data-nosnippet>42</a>    <span class="comment">// Handle the special case where it has quotes.
+<a href=#43 id=43 data-nosnippet>43</a>    </span><span class="kw">if </span>label.starts_with(<span class="string">'"'</span>) &amp;&amp; label.ends_with(<span class="string">'"'</span>) {
+<a href=#44 id=44 data-nosnippet>44</a>        <span class="kw">return </span><span class="prelude-val">Ok</span>((from, <span class="kw-2">&amp;</span>label[<span class="number">1</span>..label.len()-<span class="number">1</span>], to))
+<a href=#45 id=45 data-nosnippet>45</a>    }
+<a href=#46 id=46 data-nosnippet>46</a>
+<a href=#47 id=47 data-nosnippet>47</a>    <span class="prelude-val">Ok</span>((from, label, to))
+<a href=#48 id=48 data-nosnippet>48</a>}
+<a href=#49 id=49 data-nosnippet>49</a>
+<a href=#50 id=50 data-nosnippet>50</a><span class="doccomment">/// Loads a labelled transition system in the Aldebaran format from the given reader.
+<a href=#51 id=51 data-nosnippet>51</a>///
+<a href=#52 id=52 data-nosnippet>52</a>/// The Aldebaran format consists of a header:
+<a href=#53 id=53 data-nosnippet>53</a>///     `des (&lt;initial&gt;: Nat, &lt;num_of_transitions&gt;: Nat, &lt;num_of_states&gt;: Nat)`
+<a href=#54 id=54 data-nosnippet>54</a>///     
+<a href=#55 id=55 data-nosnippet>55</a>/// And one line for every transition:
+<a href=#56 id=56 data-nosnippet>56</a>///     `(&lt;from&gt;: Nat, "&lt;label&gt;": Str, &lt;to&gt;: Nat)`
+<a href=#57 id=57 data-nosnippet>57</a>///     `(&lt;from&gt;: Nat, &lt;label&gt;: Str, &lt;to&gt;: Nat)`
+<a href=#58 id=58 data-nosnippet>58</a></span><span class="kw">pub fn </span>read_aut(reader: <span class="kw">impl </span>Read, <span class="kw-2">mut </span>hidden_labels: Vec&lt;String&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;LabelledTransitionSystem, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+<a href=#59 id=59 data-nosnippet>59</a>    <span class="kw">let </span>start = Instant::now();
+<a href=#60 id=60 data-nosnippet>60</a>    <span class="macro">debug!</span>(<span class="string">"Reading LTS in .aut format..."</span>);
+<a href=#61 id=61 data-nosnippet>61</a>
+<a href=#62 id=62 data-nosnippet>62</a>    <span class="kw">let </span><span class="kw-2">mut </span>lines = LineIterator::new(reader);
+<a href=#63 id=63 data-nosnippet>63</a>    lines.advance();
+<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">let </span>header = lines
+<a href=#65 id=65 data-nosnippet>65</a>        .get()
+<a href=#66 id=66 data-nosnippet>66</a>        .ok_or(IOError::InvalidHeader(<span class="string">"The first line should be the header"</span>))<span class="question-mark">?</span>;
+<a href=#67 id=67 data-nosnippet>67</a>
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="comment">// Regex for des (&lt;initial&gt;: Nat, &lt;num_of_states&gt;: Nat, &lt;num_of_transitions&gt;: Nat)
+<a href=#69 id=69 data-nosnippet>69</a>    </span><span class="kw">let </span>header_regex = Regex::new(<span class="string">r#"des\s*\(\s*([0-9]*)\s*,\s*([0-9]*)\s*,\s*([0-9]*)\s*\)\s*"#</span>)
+<a href=#70 id=70 data-nosnippet>70</a>        .expect(<span class="string">"Regex compilation should not fail"</span>);
+<a href=#71 id=71 data-nosnippet>71</a>
+<a href=#72 id=72 data-nosnippet>72</a>    <span class="kw">let </span>(<span class="kw">_</span>, [initial_txt, num_of_transitions_txt, num_of_states_txt]) = header_regex
+<a href=#73 id=73 data-nosnippet>73</a>        .captures(header)
+<a href=#74 id=74 data-nosnippet>74</a>        .ok_or(IOError::InvalidHeader(
+<a href=#75 id=75 data-nosnippet>75</a>            <span class="string">"does not match des (&lt;init&gt;, &lt;num_of_transitions&gt;, &lt;num_of_states&gt;)"</span>,
+<a href=#76 id=76 data-nosnippet>76</a>        ))<span class="question-mark">?
+<a href=#77 id=77 data-nosnippet>77</a>        </span>.extract();
+<a href=#78 id=78 data-nosnippet>78</a>
+<a href=#79 id=79 data-nosnippet>79</a>    <span class="kw">let </span>initial_state: usize = initial_txt.parse()<span class="question-mark">?</span>;
+<a href=#80 id=80 data-nosnippet>80</a>    <span class="kw">let </span>num_of_transitions: usize = num_of_transitions_txt.parse()<span class="question-mark">?</span>;
+<a href=#81 id=81 data-nosnippet>81</a>    <span class="kw">let </span>num_of_states: usize = num_of_states_txt.parse()<span class="question-mark">?</span>;
+<a href=#82 id=82 data-nosnippet>82</a>
+<a href=#83 id=83 data-nosnippet>83</a>    <span class="comment">// This is used to keep track of the label to index mapping.
+<a href=#84 id=84 data-nosnippet>84</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>labels_index: HashMap&lt;String, LabelIndex&gt; = HashMap::new();
+<a href=#85 id=85 data-nosnippet>85</a>    <span class="kw">let </span><span class="kw-2">mut </span>labels: Vec&lt;String&gt; = Vec::new();
+<a href=#86 id=86 data-nosnippet>86</a>
+<a href=#87 id=87 data-nosnippet>87</a>    <span class="comment">// Pre-allocate the transitions vector
+<a href=#88 id=88 data-nosnippet>88</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>transitions: Vec&lt;(usize, CompactTransition)&gt; = Vec::with_capacity(num_of_transitions);
+<a href=#89 id=89 data-nosnippet>89</a>    <span class="kw">let </span><span class="kw-2">mut </span>progress = Progress::new(
+<a href=#90 id=90 data-nosnippet>90</a>        |value, increment| <span class="macro">debug!</span>(<span class="string">"Reading transitions {}%..."</span>, value / increment),
+<a href=#91 id=91 data-nosnippet>91</a>        num_of_transitions,
+<a href=#92 id=92 data-nosnippet>92</a>    );
+<a href=#93 id=93 data-nosnippet>93</a>
+<a href=#94 id=94 data-nosnippet>94</a>    <span class="kw">while let </span><span class="prelude-val">Some</span>(line) = lines.next() {
+<a href=#95 id=95 data-nosnippet>95</a>        <span class="macro">trace!</span>(<span class="string">"{}"</span>, line);
+<a href=#96 id=96 data-nosnippet>96</a>        <span class="kw">let </span>(from_txt, label_txt, to_txt) = read_transition(line)<span class="question-mark">?</span>;
+<a href=#97 id=97 data-nosnippet>97</a>
+<a href=#98 id=98 data-nosnippet>98</a>        <span class="comment">// Parse the from and to states, with the given label.
+<a href=#99 id=99 data-nosnippet>99</a>        </span><span class="kw">let </span>from: usize = from_txt.parse()<span class="question-mark">?</span>;
+<a href=#100 id=100 data-nosnippet>100</a>        <span class="kw">let </span>to: usize = to_txt.parse()<span class="question-mark">?</span>;
+<a href=#101 id=101 data-nosnippet>101</a>
+<a href=#102 id=102 data-nosnippet>102</a>        <span class="kw">let </span>label_index = <span class="kw-2">*</span>labels_index.entry(label_txt.to_string()).or_insert(labels.len());
+<a href=#103 id=103 data-nosnippet>103</a>
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">if </span>label_index &gt;= labels.len() {
+<a href=#105 id=105 data-nosnippet>105</a>            labels.resize_with(label_index + <span class="number">1</span>, Default::default);
+<a href=#106 id=106 data-nosnippet>106</a>        }
+<a href=#107 id=107 data-nosnippet>107</a>
+<a href=#108 id=108 data-nosnippet>108</a>        <span class="macro">trace!</span>(<span class="string">"Read transition {} --[{}]-&gt; {}"</span>, from, label_txt, to);
+<a href=#109 id=109 data-nosnippet>109</a>
+<a href=#110 id=110 data-nosnippet>110</a>        <span class="comment">// Create CompactTransition directly
+<a href=#111 id=111 data-nosnippet>111</a>        </span>transitions.push((from, CompactTransition::new(label_index, to)));
+<a href=#112 id=112 data-nosnippet>112</a>
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">if </span>labels[label_index].is_empty() {
+<a href=#114 id=114 data-nosnippet>114</a>            labels[label_index] = label_txt.to_string();
+<a href=#115 id=115 data-nosnippet>115</a>        }
+<a href=#116 id=116 data-nosnippet>116</a>
+<a href=#117 id=117 data-nosnippet>117</a>        progress.add(<span class="number">1</span>);
+<a href=#118 id=118 data-nosnippet>118</a>    }
+<a href=#119 id=119 data-nosnippet>119</a>
+<a href=#120 id=120 data-nosnippet>120</a>    <span class="comment">// Remove duplicated transitions, it is not clear if they are allowed in the .aut format.
+<a href=#121 id=121 data-nosnippet>121</a>    // I don't think we should do this, it seems expensive and not really necessary.
+<a href=#122 id=122 data-nosnippet>122</a>    // transitions.sort_unstable_by_key(|(from, _)| *from);
+<a href=#123 id=123 data-nosnippet>123</a>    // transitions.dedup();
+<a href=#124 id=124 data-nosnippet>124</a>
+<a href=#125 id=125 data-nosnippet>125</a>    </span><span class="macro">debug!</span>(<span class="string">"Finished reading LTS"</span>);
+<a href=#126 id=126 data-nosnippet>126</a>
+<a href=#127 id=127 data-nosnippet>127</a>    hidden_labels.push(<span class="string">"tau"</span>.to_string());
+<a href=#128 id=128 data-nosnippet>128</a>    <span class="macro">debug!</span>(<span class="string">"Time read_aut: {:.3}s"</span>, start.elapsed().as_secs_f64());
+<a href=#129 id=129 data-nosnippet>129</a>
+<a href=#130 id=130 data-nosnippet>130</a>    <span class="prelude-val">Ok</span>(LabelledTransitionSystem::new(
+<a href=#131 id=131 data-nosnippet>131</a>        initial_state,
+<a href=#132 id=132 data-nosnippet>132</a>        <span class="prelude-val">Some</span>(num_of_states),
+<a href=#133 id=133 data-nosnippet>133</a>        || transitions.iter().cloned(),
+<a href=#134 id=134 data-nosnippet>134</a>        labels,
+<a href=#135 id=135 data-nosnippet>135</a>        hidden_labels,
+<a href=#136 id=136 data-nosnippet>136</a>    ))
+<a href=#137 id=137 data-nosnippet>137</a>}
+<a href=#138 id=138 data-nosnippet>138</a>
+<a href=#139 id=139 data-nosnippet>139</a><span class="doccomment">/// Write a labelled transition system in plain text in Aldebaran format to the given writer.
+<a href=#140 id=140 data-nosnippet>140</a></span><span class="kw">pub fn </span>write_aut(writer: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>Write, lts: <span class="kw-2">&amp;</span>LabelledTransitionSystem) -&gt; <span class="prelude-ty">Result</span>&lt;(), Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+<a href=#141 id=141 data-nosnippet>141</a>    <span class="macro">writeln!</span>(
+<a href=#142 id=142 data-nosnippet>142</a>        writer,
+<a href=#143 id=143 data-nosnippet>143</a>        <span class="string">"des ({}, {}, {})"</span>,
+<a href=#144 id=144 data-nosnippet>144</a>        lts.initial_state_index(),
+<a href=#145 id=145 data-nosnippet>145</a>        lts.num_of_transitions(),
+<a href=#146 id=146 data-nosnippet>146</a>        lts.num_of_states()
+<a href=#147 id=147 data-nosnippet>147</a>    )<span class="question-mark">?</span>;
+<a href=#148 id=148 data-nosnippet>148</a>
+<a href=#149 id=149 data-nosnippet>149</a>    <span class="kw">for </span>state_index <span class="kw">in </span>lts.iter_states() {
+<a href=#150 id=150 data-nosnippet>150</a>        <span class="kw">for </span>trans <span class="kw">in </span>lts.outgoing_transitions_compact(state_index) {
+<a href=#151 id=151 data-nosnippet>151</a>            <span class="macro">writeln!</span>(
+<a href=#152 id=152 data-nosnippet>152</a>                writer,
+<a href=#153 id=153 data-nosnippet>153</a>                <span class="string">"({}, \"{}\", {})"</span>,
+<a href=#154 id=154 data-nosnippet>154</a>                state_index,
+<a href=#155 id=155 data-nosnippet>155</a>                <span class="kw">if </span>lts.is_hidden_label(trans.label()) {
+<a href=#156 id=156 data-nosnippet>156</a>                    <span class="string">"tau"
+<a href=#157 id=157 data-nosnippet>157</a>                </span>} <span class="kw">else </span>{
+<a href=#158 id=158 data-nosnippet>158</a>                    <span class="kw-2">&amp;</span>lts.labels()[trans.label()]
+<a href=#159 id=159 data-nosnippet>159</a>                },
+<a href=#160 id=160 data-nosnippet>160</a>                trans.state()
+<a href=#161 id=161 data-nosnippet>161</a>            )<span class="question-mark">?</span>;
+<a href=#162 id=162 data-nosnippet>162</a>        }
+<a href=#163 id=163 data-nosnippet>163</a>    }
+<a href=#164 id=164 data-nosnippet>164</a>
+<a href=#165 id=165 data-nosnippet>165</a>    <span class="prelude-val">Ok</span>(())
+<a href=#166 id=166 data-nosnippet>166</a>}
+<a href=#167 id=167 data-nosnippet>167</a>
+<a href=#168 id=168 data-nosnippet>168</a><span class="attr">#[cfg(test)]
+<a href=#169 id=169 data-nosnippet>169</a></span><span class="kw">mod </span>tests {
+<a href=#170 id=170 data-nosnippet>170</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#171 id=171 data-nosnippet>171</a>
+<a href=#172 id=172 data-nosnippet>172</a>    <span class="kw">use </span>test_log::test;
+<a href=#173 id=173 data-nosnippet>173</a>
+<a href=#174 id=174 data-nosnippet>174</a>    <span class="attr">#[test]
+<a href=#175 id=175 data-nosnippet>175</a>    </span><span class="kw">fn </span>test_reading_aut() {
+<a href=#176 id=176 data-nosnippet>176</a>        <span class="kw">let </span>file = <span class="macro">include_str!</span>(<span class="string">"../../../examples/lts/abp.aut"</span>);
+<a href=#177 id=177 data-nosnippet>177</a>
+<a href=#178 id=178 data-nosnippet>178</a>        <span class="kw">let </span>lts = read_aut(file.as_bytes(), <span class="macro">vec!</span>[]).unwrap();
+<a href=#179 id=179 data-nosnippet>179</a>
+<a href=#180 id=180 data-nosnippet>180</a>        <span class="macro">assert_eq!</span>(lts.initial_state_index(), <span class="number">0</span>);
+<a href=#181 id=181 data-nosnippet>181</a>        <span class="macro">assert_eq!</span>(lts.num_of_transitions(), <span class="number">92</span>);
+<a href=#182 id=182 data-nosnippet>182</a>        <span class="macro">println!</span>(<span class="string">"{}"</span>, lts);
+<a href=#183 id=183 data-nosnippet>183</a>    }
+<a href=#184 id=184 data-nosnippet>184</a>
+<a href=#185 id=185 data-nosnippet>185</a>    <span class="attr">#[test]
+<a href=#186 id=186 data-nosnippet>186</a>    </span><span class="kw">fn </span>test_lts_failure() {
+<a href=#187 id=187 data-nosnippet>187</a>        <span class="kw">let </span>wrong_header = <span class="string">"
+<a href=#188 id=188 data-nosnippet>188</a>        des (0,2,                                     
+<a href=#189 id=189 data-nosnippet>189</a>            (0,\"r1(d1)\",1)
+<a href=#190 id=190 data-nosnippet>190</a>            (0,\"r1(d2)\",2)
+<a href=#191 id=191 data-nosnippet>191</a>        "</span>;
+<a href=#192 id=192 data-nosnippet>192</a>
+<a href=#193 id=193 data-nosnippet>193</a>        <span class="macro">debug_assert!</span>(read_aut(wrong_header.as_bytes(), <span class="macro">vec!</span>[]).is_err());
+<a href=#194 id=194 data-nosnippet>194</a>
+<a href=#195 id=195 data-nosnippet>195</a>        <span class="kw">let </span>wrong_transition = <span class="string">"
+<a href=#196 id=196 data-nosnippet>196</a>        des (0,2,3)                           
+<a href=#197 id=197 data-nosnippet>197</a>            (0,\"r1(d1),1)
+<a href=#198 id=198 data-nosnippet>198</a>            (0,\"r1(d2)\",2)
+<a href=#199 id=199 data-nosnippet>199</a>        "</span>;
+<a href=#200 id=200 data-nosnippet>200</a>
+<a href=#201 id=201 data-nosnippet>201</a>        <span class="macro">debug_assert!</span>(read_aut(wrong_transition.as_bytes(), <span class="macro">vec!</span>[]).is_err());
+<a href=#202 id=202 data-nosnippet>202</a>    }
+<a href=#203 id=203 data-nosnippet>203</a>
+<a href=#204 id=204 data-nosnippet>204</a>    <span class="attr">#[test]
+<a href=#205 id=205 data-nosnippet>205</a>    </span><span class="kw">fn </span>test_traversal_lts() {
+<a href=#206 id=206 data-nosnippet>206</a>        <span class="kw">let </span>file = <span class="macro">include_str!</span>(<span class="string">"../../../examples/lts/abp.aut"</span>);
+<a href=#207 id=207 data-nosnippet>207</a>
+<a href=#208 id=208 data-nosnippet>208</a>        <span class="kw">let </span>lts = read_aut(file.as_bytes(), <span class="macro">vec!</span>[]).unwrap();
+<a href=#209 id=209 data-nosnippet>209</a>
+<a href=#210 id=210 data-nosnippet>210</a>        <span class="comment">// Check the number of outgoing transitions of the initial state
+<a href=#211 id=211 data-nosnippet>211</a>        </span><span class="macro">assert_eq!</span>(lts.outgoing_transitions(lts.initial_state_index()).count(), <span class="number">2</span>);
+<a href=#212 id=212 data-nosnippet>212</a>    }
+<a href=#213 id=213 data-nosnippet>213</a>
+<a href=#214 id=214 data-nosnippet>214</a>    <span class="attr">#[test]
+<a href=#215 id=215 data-nosnippet>215</a>    </span><span class="kw">fn </span>test_writing_lts() {
+<a href=#216 id=216 data-nosnippet>216</a>        <span class="kw">let </span>file = <span class="macro">include_str!</span>(<span class="string">"../../../examples/lts/abp.aut"</span>);
+<a href=#217 id=217 data-nosnippet>217</a>        <span class="kw">let </span>lts_original = read_aut(file.as_bytes(), <span class="macro">vec!</span>[]).unwrap();
+<a href=#218 id=218 data-nosnippet>218</a>
+<a href=#219 id=219 data-nosnippet>219</a>        <span class="comment">// Check that it can be read after writing, and results in the same LTS.
+<a href=#220 id=220 data-nosnippet>220</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>buffer: Vec&lt;u8&gt; = Vec::new();
+<a href=#221 id=221 data-nosnippet>221</a>        write_aut(<span class="kw-2">&amp;mut </span>buffer, <span class="kw-2">&amp;</span>lts_original).unwrap();
+<a href=#222 id=222 data-nosnippet>222</a>
+<a href=#223 id=223 data-nosnippet>223</a>        <span class="kw">let </span>lts = read_aut(<span class="kw-2">&amp;</span>buffer[<span class="number">0</span>..], <span class="macro">vec!</span>[]).unwrap();
+<a href=#224 id=224 data-nosnippet>224</a>
+<a href=#225 id=225 data-nosnippet>225</a>        <span class="macro">assert!</span>(lts.num_of_states() == lts_original.num_of_states());
+<a href=#226 id=226 data-nosnippet>226</a>        <span class="macro">assert!</span>(lts.num_of_labels() == lts_original.num_of_labels());
+<a href=#227 id=227 data-nosnippet>227</a>    }
+<a href=#228 id=228 data-nosnippet>228</a>}</code></pre></div></section></main></body></html>

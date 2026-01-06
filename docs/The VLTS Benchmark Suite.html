@@ -1,0 +1,1650 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The VLTS Benchmark Suite</title>
+<style type="text/css">
+   td.bool { text-align : center } 
+   td.num { text-align : right } 
+</style>
+<link rel="icon" href="https://cadp.inria.fr/share/inria.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://cadp.inria.fr/share/inria.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="The%20VLTS%20Benchmark%20Suite_files/style.css">
+</head>
+<body>
+
+<!-- Titre -->
+<div id="titre">
+   <div class="h1only">The&nbsp;VLTS&nbsp;Benchmark&nbsp;Suite</div>
+</div>
+
+<!-- Menu -->
+<div id="menu">
+<table cellspacing="0" border="0">
+<tbody><tr>
+   <td class="rosace">
+      <a href="https://cadp.inria.fr/"><img src="The%20VLTS%20Benchmark%20Suite_files/cadp.gif" alt="CADP logo"></a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>What is CADP?</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/">Home Page</a>
+      <br>
+      <a href="https://cadp.inria.fr/tools.html">Tools Overview</a>
+      <br>
+      <a href="https://cadp.inria.fr/status.html">Current Status</a>
+      <br>
+      <a href="https://cadp.inria.fr/changes.html">Recent Changes</a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>Installation</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/registration/">How to obtain CADP?</a>
+      <br>
+      <a href="https://cadp.inria.fr/usage/">Usage Statistics</a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>Documentation</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/faq.html">FAQ</a>
+      <br>
+      <a href="https://cadp.inria.fr/tutorial/">Tutorials</a>
+      <br>
+      <a href="https://cadp.inria.fr/publications/">Publications</a>
+      <br>
+      <a href="https://cadp.inria.fr/man/">Manual Pages</a>
+      <br>
+      <a href="https://cadp.inria.fr/demos.html">Demo Examples</a>
+      <br>
+      <a href="https://cadp.inria.fr/news.html">Newsletters</a>
+      <br>
+      <a href="http://en.wikipedia.org/wiki/CADP">Wikipedia</a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>CADP Community</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/forum.html">Forum</a>
+      <br>
+      <a href="https://cadp.inria.fr/training/">Education &amp; Training</a>
+      <br>
+      <a href="https://cadp.inria.fr/case-studies/">Case Studies</a>
+      <br>
+      <a href="https://cadp.inria.fr/software/">Research Tools</a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>CADP Resources</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/resources/vlts">VLTS Benchmarks</a>
+      <br>
+      <a href="https://cadp.inria.fr/resources/">Other Resources</a>
+   </td>
+</tr>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<tr>
+   <th>About CADP</th>
+</tr>
+<tr>
+   <td>
+      <a href="https://cadp.inria.fr/contributors.html">Contributors</a>
+   </td>
+</tr>
+
+</tbody></table>
+</div>
+<!-- Fin du menu -->
+
+<div id="contenu">
+    
+<!-- ---------------------------------------------------------------------- -->
+
+<font color="red">
+<h2> <i>A joint project of CWI/SEN2 and INRIA/VASY</i> </h2>
+</font>
+
+<!-- ---------------------------------------------------------------------- -->
+
+<table>
+<tbody><tr><td>
+<img src="The%20VLTS%20Benchmark%20Suite_files/lts_1.jpg">
+</td> <td>
+<img src="The%20VLTS%20Benchmark%20Suite_files/lts_2.jpg">
+</td> <td>
+<img src="The%20VLTS%20Benchmark%20Suite_files/lts_3.jpg">
+</td> <td>
+<img src="The%20VLTS%20Benchmark%20Suite_files/lts_4.jpg">
+</td> <td>
+<img src="The%20VLTS%20Benchmark%20Suite_files/lts_5.jpg">
+</td></tr>
+<tr><td colspan="5" align="right">
+<font size="-2">Pictures courtesy of Jan Friso Groote and Frank van Ham (Technical University of Eindhoven)</font>
+</td></tr>
+</tbody></table>
+
+<h2>Contents</h2>
+
+<ul>
+<a href="#section-1">1. What is the VLTS benchmark suite?</a>
+<br>
+<a href="#section-2">2. Why the VLTS benchmark suite?</a>
+<br>
+<a href="#section-3">3. How to use the VLTS benchmark suite?</a>
+<br>
+<a href="#section-4">4. Contents of the VLTS benchmark suite</a>
+<br>
+<a href="#section-5">5. History of versions - Contributors</a>
+<br>
+<a href="#annex-A">Annex A. How to donate new benchmarks?</a>
+<br>
+<a href="#annex-B">Annex B. How to scramble BCG graphs?</a>
+<br>
+<a href="#annex-C">Annex C. Scientific publications using the VLTS benchmark suite</a>
+<img alt="UPDATED!" src="The%20VLTS%20Benchmark%20Suite_files/updated.gif">
+</ul>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+
+<h2><a name="section-1"></a> 1. What is the VLTS benchmark suite? </h2>
+
+<p>
+The VLTS acronym stands for "<i>Very Large Transition Systems</i>".
+
+</p><p>
+The VLTS benchmark suite is a collection of <i>Labelled Transition Systems</i> (hereafter called <i>benchmarks</i>). 
+
+</p><p>
+Each Labelled Transition System is a directed, connected graph, whose vertices are called <i>states</i> and whose edges are called <i>transitions</i>. There is one distinguished vertex called the <i>initial state</i>. Each transition is labelled by a character string called <i>action</i> or <i>label</i>. There is one distinguished label noted "<i>i</i>" that is used for so-called <i>invisible</i> transitions (also known as <i>hidden</i> transitions or <i>tau</i>-transitions).
+
+</p><p>
+The VLTS benchmarks have been obtained from various case studies about 
+the modelling of communication protocols and concurrent systems. Many of
+ these case studies correspond to real life, industrial systems.
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2><a name="section-2"></a> 2. Why the VLTS benchmark suite? </h2>
+
+<p>
+The VLTS benchmark suite is designed to be a reference criterion for 
+scientific assessment of algorithms and tools operating on large graphs.
+ 
+
+</p><p>
+In particular, this encompasses algorithms and tools for <i>explicit state verification</i> of concurrent systems, including:
+</p><ul>
+<li> model checkers,
+</li><li> equivalence checkers (comparison and minimization tools, etc.),
+</li><li> graph visualization tools,
+</li><li> formats for representing transitions systems,
+</li><li> etc.
+</li></ul>
+
+<p>
+Algorithms and tools operating on more general graphs than transition 
+systems may also benefit from the VLTS benchmark suite by simply 
+discarding label information attached to transitions.
+
+</p><p>
+The need for the VLTS benchmark suite was recognized in several places, 
+e.g., by Agostino Dovier, Carla Piazza, and Alberto Policriti in their 
+CAV'2001 paper ("A Fast Bisimulation Algorithm"):
+
+</p><p>
+</p><ul>
+<i>
+To the best of our knowledge there is no `official' set of benchmarks 
+for testing an algorithm such as the one we propose in our paper. We 
+decided to test our
+implementation in the context of formal verification using model 
+checkers and considering the transition graphs they generate from a 
+given program [...]. Usually, the graphs generated consist of a unique 
+strongly connected component and the set of possible labels is huge. 
+</i>
+</ul>
+
+<p>
+The VLTS benchmark suite intends to fill this gap by providing a 
+comprehensive set of benchmarks. We hope that it will be as useful as 
+other standard benchmarks, such as those developed, e.g., to assess 
+Binary Decision Diagrams packages.
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2><a name="section-3"></a> 3. How to use the VLTS benchmark suite? </h2>
+
+	All the graphs are encoded in the <a href="https://cadp.inria.fr/man/bcg.html">BCG (Binary-Coded Graphs)</a> format, then compressed using the <a href="http://sources.redhat.com/bzip2"><b>bzip2</b></a> tool. To our knowledge, this is up to now the most compact way for storing Very Large Transition Systems.
+
+<p>
+	First, you should make sure that you are working on a machine with 
+enough free disk space available (at least 500 megabytes, 1 gigabyte to 
+be safe).
+
+</p><p>
+	If you do not have already the <a href="https://cadp.inria.fr/">CADP</a> tools installed on your machine, please registrate  <a href="https://cadp.inria.fr/registration">here</a>.
+
+</p><p>
+	After downloading a graph, say "<i>graph</i><b>.bcg.bz2</b>", from the Table below, you must first uncompress it using the <a href="http://sources.redhat.com/bzip2"><b>bunzip2</b></a> tool: 
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>bunzip2</b> <i>graph</i><b>.bcg.bz2</b> 
+<br>
+This will produce a BCG graph named "<i>graph</i><b>.bcg</b>".
+
+</p><p>
+You can read and process "<i>graph</i><b>.bcg</b>" from a computer program in two different ways:
+</p><ol>
+<li>
+	You can use the <a href="https://cadp.inria.fr/man/bcg_read.html"><b>bcg_read</b></a> API (<i>Application Programming Interface</i>),
+ which provides a simple set of functions for handling BCG graphs. You 
+will have to link your computer program against the BCG binary 
+libraries.
+
+<p></p></li><li>
+	You can use the <a href="https://cadp.inria.fr/man/bcg_io.html"><b>bcg_io</b></a>
+ tool, which converts BCG graphs into a dozen of other formats (mostly 
+textual formats). To avoid disk space overflow, it is recommended to use
+ this tool in <i>pipe mode</i>, so that the converted graph is not written to disk. For instance:
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <b>bcg_io</b> <i>graph</i><b>.bcg -aldebaran - | more</b>
+</li></ol>
+
+<p>
+<b>Note:</b>
+In addition to the VLTS benchmarks, you might be interested by the various classes of `regular' benchmarks produced by the <a href="https://cadp.inria.fr/man/bcg_graph.html"><b>bcg_graph</b></a> tool.
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2><a name="section-4"></a> 4. Contents of the VLTS benchmark suite </h2>
+
+<p>
+The VLTS benchmarks can be downloaded from the Table below.
+Each row of the Table corresponds to one benchmark.
+The columns of the Table contain the following data:
+
+</p><ul>
+<li> Column 1: Benchmark name, of the form "<i>X_M_N</i><b>.bcg.bz2</b>", 
+where <i>X</i> gives the origin of the benchmark (<b>cwi</b> or <b>vasy</b>),
+<i>M</i> is the number of states divided by 1000, and
+<i>N</i> is the number of transitions divided by 1000.
+
+</li><li> Column 2: Number of states
+</li><li> Column 3: Number of transitions
+</li><li> Column 4: Number of tau-transitions (<i>a.k.a.</i> invisible transitions or "i"-transitions).
+</li><li> Column 5: Number of distinct labels
+</li><li> Column 6: Branching factor (average [minimal - maximal])
+</li><li> Column 7: Presence of deadlocks: yes (X) or no (-)
+</li><li> Column 8: Presence of livelocks (<i>i.e.</i>, cycles of one or more tau-transitions) : yes (X) or no (-)
+</li><li> Column 9: Deterministic graph (<i>i.e.</i>, transitions going out of the same state have different labels): yes (X) or no (-)
+</li><li> Column 10: Version of the VLTS benchmark suite to which the benchmark belongs
+</li><li> Column 11: Size of the BCG file in kilobytes (1 kB = 1024 bytes)
+</li><li> Column 12: Size of the BCG file in kilobytes after compression by bzip2
+</li></ul>
+
+
+    <table cellspacing="0" cellpadding="0" border="0" bgcolor="#aaaaaa" align="center">
+    <tbody><tr><td>
+    <table cellspacing="1" cellpadding="3" border="0">
+      <tbody><tr>
+        <th bgcolor="white">Name<br>(.bcg.bz2)</th>
+        <td width="0" bgcolor="white"></td>
+        <th bgcolor="white">#States</th>
+        <th bgcolor="white">#Transitions</th>
+        <td width="0" bgcolor="white"></td>
+        <th bgcolor="white">#Tau-<br>transitions</th>
+        <th bgcolor="white">#Labels</th>
+        <th bgcolor="white">Branching factor<br>avg [min - max]</th>
+        <th bgcolor="white">Deadlocks</th>
+        <th bgcolor="white">Livelocks</th>
+        <th bgcolor="white">Deterministic</th>
+        <th bgcolor="white">Version</th>
+        <th bgcolor="white">Size (.bcg)</th>
+        <th bgcolor="white">Size (.bz2)</th>
+      </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_0_1"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_0_1.bcg.bz2">vasy_0_1</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">289</td>
+      <td class="num" bgcolor="white">1,224</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">0</td>
+      <td class="num" bgcolor="white">2</td>
+      <td class="num" bgcolor="white">4.24 [4 - 8]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">4</td>
+      <td class="num" bgcolor="white">2</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_1_2"></a>
+	 <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_1_2.bcg.bz2">cwi_1_2</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">1,952</td>
+      <td class="num" bgcolor="white">2,387</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,215</td>
+      <td class="num" bgcolor="white">26</td>
+      <td class="num" bgcolor="white">1.22 [1 - 16]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">8</td>
+      <td class="num" bgcolor="white">2</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_1_4"></a>
+	 <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_1_4.bcg.bz2">vasy_1_4</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">1,183</td>
+      <td class="num" bgcolor="white">4,464</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">1,213</td>
+      <td class="num" bgcolor="white">6</td>
+      <td class="num" bgcolor="white">3.77 [2 - 5]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">10</td>
+      <td class="num" bgcolor="white">6</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_3_14"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_3_14.bcg.bz2">cwi_3_14</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,996</td>
+      <td class="num" bgcolor="white">14,552</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">14,551</td>
+      <td class="num" bgcolor="white">2</td>
+      <td class="num" bgcolor="white">3.64 [0 - 6]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">13</td>
+      <td class="num" bgcolor="white">7</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_5_9"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_5_9.bcg.bz2">vasy_5_9</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">5,486</td>
+      <td class="num" bgcolor="white">9,676</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,094</td>
+      <td class="num" bgcolor="white">31</td>
+      <td class="num" bgcolor="white">1.76 [0 - 6]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">20</td>
+      <td class="num" bgcolor="white">8</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_8_24"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_8_24.bcg.bz2">vasy_8_24</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">8,879</td>
+      <td class="num" bgcolor="white">24,411</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">8,534</td>
+      <td class="num" bgcolor="white">11</td>
+      <td class="num" bgcolor="white">2.75 [1 - 5]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">47</td>
+      <td class="num" bgcolor="white">32</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_8_38"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_8_38.bcg.bz2">vasy_8_38</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">8,921</td>
+      <td class="num" bgcolor="white">38,424</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,916</td>
+      <td class="num" bgcolor="white">81</td>
+      <td class="num" bgcolor="white">4.31 [0 - 10]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">69</td>
+      <td class="num" bgcolor="white">21</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_10_56"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_10_56.bcg.bz2">vasy_10_56</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">10,849</td>
+      <td class="num" bgcolor="white">56,156</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,680</td>
+      <td class="num" bgcolor="white">12</td>
+      <td class="num" bgcolor="white">5.18 [4 - 6]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">120</td>
+      <td class="num" bgcolor="white">34</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_18_73"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_18_73.bcg.bz2">vasy_18_73</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">18,746</td>
+      <td class="num" bgcolor="white">73,043</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">39,217</td>
+      <td class="num" bgcolor="white">17</td>
+      <td class="num" bgcolor="white">3.90 [1 - 6]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">118</td>
+      <td class="num" bgcolor="white">97</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_25_25"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_25_25.bcg.bz2">vasy_25_25</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">25,217</td>
+      <td class="num" bgcolor="white">25,216</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">0</td>
+      <td class="num" bgcolor="white">25,216</td>
+      <td class="num" bgcolor="white">1.00 [0 - 1]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">3,454</td>
+      <td class="num" bgcolor="white">245</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_40_60"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_40_60.bcg.bz2">vasy_40_60</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">40,006</td>
+      <td class="num" bgcolor="white">60,007</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">20,003</td>
+      <td class="num" bgcolor="white">3</td>
+      <td class="num" bgcolor="white">1.50 [1 - 2]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">80</td>
+      <td class="num" bgcolor="white">1</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_52_318"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_52_318.bcg.bz2">vasy_52_318</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">52,268</td>
+      <td class="num" bgcolor="white">318,126</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">130,752</td>
+      <td class="num" bgcolor="white">17</td>
+      <td class="num" bgcolor="white">6.09 [1 - 17]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">696</td>
+      <td class="num" bgcolor="white">566</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_65_2621"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_65_2621.bcg.bz2">vasy_65_2621</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">65,537</td>
+      <td class="num" bgcolor="white">2,621,480</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">0</td>
+      <td class="num" bgcolor="white">72</td>
+      <td class="num" bgcolor="white">40.00 [40 - 40]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">5,272</td>
+      <td class="num" bgcolor="white">835</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_66_1302"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_66_1302.bcg.bz2">vasy_66_1302</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">66,929</td>
+      <td class="num" bgcolor="white">1,302,664</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">117,866</td>
+      <td class="num" bgcolor="white">81</td>
+      <td class="num" bgcolor="white">19.46 [2 - 42]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">2,617</td>
+      <td class="num" bgcolor="white">1,441</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_69_520"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_69_520.bcg.bz2">vasy_69_520</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">69,754</td>
+      <td class="num" bgcolor="white">520,633</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">1</td>
+      <td class="num" bgcolor="white">135</td>
+      <td class="num" bgcolor="white">7.46 [0 - 35]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">1,136</td>
+      <td class="num" bgcolor="white">727</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_83_325"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_83_325.bcg.bz2">vasy_83_325</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">83,436</td>
+      <td class="num" bgcolor="white">325,584</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">45,696</td>
+      <td class="num" bgcolor="white">211</td>
+      <td class="num" bgcolor="white">3.90 [0 - 96]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">822</td>
+      <td class="num" bgcolor="white">474</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_116_368"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_116_368.bcg.bz2">vasy_116_368</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">116,456</td>
+      <td class="num" bgcolor="white">368,569</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">263,296</td>
+      <td class="num" bgcolor="white">21</td>
+      <td class="num" bgcolor="white">3.16 [1 - 8]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">538</td>
+      <td class="num" bgcolor="white">419</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_142_925"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_142_925.bcg.bz2">cwi_142_925</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">142,472</td>
+      <td class="num" bgcolor="white">925,429</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">862,298</td>
+      <td class="num" bgcolor="white">7</td>
+      <td class="num" bgcolor="white">6.50 [0 - 9]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">1,147</td>
+      <td class="num" bgcolor="white">994</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_157_297"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_157_297.bcg.bz2">vasy_157_297</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">157,604</td>
+      <td class="num" bgcolor="white">297,000</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">31,798</td>
+      <td class="num" bgcolor="white">235</td>
+      <td class="num" bgcolor="white">1.88 [0 - 48]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">540</td>
+      <td class="num" bgcolor="white">53</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_164_1619"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_164_1619.bcg.bz2">vasy_164_1619</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">164,865</td>
+      <td class="num" bgcolor="white">1,619,204</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">109,910</td>
+      <td class="num" bgcolor="white">37</td>
+      <td class="num" bgcolor="white">9.82 [1 - 16]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">3,318</td>
+      <td class="num" bgcolor="white">870</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_166_651"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_166_651.bcg.bz2">vasy_166_651</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">166,464</td>
+      <td class="num" bgcolor="white">651,168</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">91,392</td>
+      <td class="num" bgcolor="white">211</td>
+      <td class="num" bgcolor="white">3.91 [0 - 96]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">1,513</td>
+      <td class="num" bgcolor="white">554</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_214_684"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_214_684.bcg.bz2">cwi_214_684</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">214,202</td>
+      <td class="num" bgcolor="white">684,419</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">550,611</td>
+      <td class="num" bgcolor="white">5</td>
+      <td class="num" bgcolor="white">3.20 [0 - 7]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">904</td>
+      <td class="num" bgcolor="white">464</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_371_641"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_371_641.bcg.bz2">cwi_371_641</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">371,804</td>
+      <td class="num" bgcolor="white">641,565</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">445,600</td>
+      <td class="num" bgcolor="white">61</td>
+      <td class="num" bgcolor="white">1.73 [1 - 25]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">942</td>
+      <td class="num" bgcolor="white">167</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_386_1171"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_386_1171.bcg.bz2">vasy_386_1171</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">386,496</td>
+      <td class="num" bgcolor="white">1,171,872</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">122,976</td>
+      <td class="num" bgcolor="white">73</td>
+      <td class="num" bgcolor="white">3.03 [1 - 38]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">1,705</td>
+      <td class="num" bgcolor="white">122</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_566_3984"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_566_3984.bcg.bz2">cwi_566_3984</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">566,640</td>
+      <td class="num" bgcolor="white">3,984,157</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,666,614</td>
+      <td class="num" bgcolor="white">11</td>
+      <td class="num" bgcolor="white">7.03 [0 - 10]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">4,743</td>
+      <td class="num" bgcolor="white">3,988</td>
+    </tr><tr>
+      <td bgcolor="white">
+         <a name="vasy_574_13561"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_574_13561.bcg.bz2">vasy_574_13561</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">574,057</td>
+      <td class="num" bgcolor="white">13,561,040</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">0</td>
+      <td class="num" bgcolor="white">141</td>
+      <td class="num" bgcolor="white">23.62 [1 - 64]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">22,446</td>
+      <td class="num" bgcolor="white">687</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_720_390"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_720_390.bcg.bz2">vasy_720_390</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">720,247<a href="#note_720_390"><big><sup>*</sup></big></a></td>
+      <td class="num" bgcolor="white">390,999<a href="#note_720_390"><big><sup>*</sup></big></a></td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">1</td>
+      <td class="num" bgcolor="white">49</td>
+      <td class="num" bgcolor="white">0.54 [0 - 39]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">1,279</td>
+      <td class="num" bgcolor="white">171</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_1112_5290"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_1112_5290.bcg.bz2">vasy_1112_5290</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">1,112,490</td>
+      <td class="num" bgcolor="white">5,290,860</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">0</td>
+      <td class="num" bgcolor="white">23</td>
+      <td class="num" bgcolor="white">4.76 [3 - 6]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">12,956</td>
+      <td class="num" bgcolor="white">8,330</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_2165_8723"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_2165_8723.bcg.bz2">cwi_2165_8723</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,165,446</td>
+      <td class="num" bgcolor="white">8,723,465</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,830,225</td>
+      <td class="num" bgcolor="white">26</td>
+      <td class="num" bgcolor="white">4.03 [1 - 14]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">15,088</td>
+      <td class="num" bgcolor="white">8,596</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_2416_17605"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_2416_17605.bcg.bz2">cwi_2416_17605</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,416,632</td>
+      <td class="num" bgcolor="white">17,605,592</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">17,490,904</td>
+      <td class="num" bgcolor="white">15</td>
+      <td class="num" bgcolor="white">7.29 [0 - 14]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">22,298</td>
+      <td class="num" bgcolor="white">19,398</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_2581_11442"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_2581_11442.bcg.bz2">vasy_2581_11442</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,581,374</td>
+      <td class="num" bgcolor="white">11,442,382</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,508,518</td>
+      <td class="num" bgcolor="white">223</td>
+      <td class="num" bgcolor="white">4.43 [0 - 97]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">25,882</td>
+      <td class="num" bgcolor="white">17,732</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_4220_13944"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_4220_13944.bcg.bz2">vasy_4220_13944</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">4,220,790</td>
+      <td class="num" bgcolor="white">13,944,372</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,546,649</td>
+      <td class="num" bgcolor="white">223</td>
+      <td class="num" bgcolor="white">3.30 [0 - 97]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">30,823</td>
+      <td class="num" bgcolor="white">8,450</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_4338_15666"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_4338_15666.bcg.bz2">vasy_4338_15666</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">4,338,672</td>
+      <td class="num" bgcolor="white">15,666,588</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,127,116</td>
+      <td class="num" bgcolor="white">223</td>
+      <td class="num" bgcolor="white">3.61 [0 - 97]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">37,119</td>
+      <td class="num" bgcolor="white">15,422</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_6020_19353"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_6020_19353.bcg.bz2">vasy_6020_19353</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">6,020,550</td>
+      <td class="num" bgcolor="white">19,353,474</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">17,526,144</td>
+      <td class="num" bgcolor="white">511</td>
+      <td class="num" bgcolor="white">3.21 [2 - 260]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">22,072</td>
+      <td class="num" bgcolor="white">565</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_6120_11031"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_6120_11031.bcg.bz2">vasy_6120_11031</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">6,120,718</td>
+      <td class="num" bgcolor="white">11,031,292</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,152,976</td>
+      <td class="num" bgcolor="white">125</td>
+      <td class="num" bgcolor="white">1.80 [0 - 16]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">19,256</td>
+      <td class="num" bgcolor="white">4,169</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_7838_59101"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_7838_59101.bcg.bz2">cwi_7838_59101</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">7,838,608</td>
+      <td class="num" bgcolor="white">59,101,007</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">22,842,122</td>
+      <td class="num" bgcolor="white">20</td>
+      <td class="num" bgcolor="white">7.54 [3 - 13]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">114,277</td>
+      <td class="num" bgcolor="white">64,427</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_8082_42933"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_8082_42933.bcg.bz2">vasy_8082_42933</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">8,082,905</td>
+      <td class="num" bgcolor="white">42,933,110</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,535,944</td>
+      <td class="num" bgcolor="white">211</td>
+      <td class="num" bgcolor="white">5.31 [0 - 48]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">76,670</td>
+      <td class="num" bgcolor="white">2,452</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_11026_24660"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_11026_24660.bcg.bz2">vasy_11026_24660</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">11,026,932</td>
+      <td class="num" bgcolor="white">24,660,513</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">2,748,559</td>
+      <td class="num" bgcolor="white">119</td>
+      <td class="num" bgcolor="white">2.24 [0 - 13]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">51,740</td>
+      <td class="num" bgcolor="white">29,016</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="vasy_12323_27667"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/vasy_12323_27667.bcg.bz2">vasy_12323_27667</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">12,323,703</td>
+      <td class="num" bgcolor="white">27,667,803</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">3,153,502</td>
+      <td class="num" bgcolor="white">119</td>
+      <td class="num" bgcolor="white">2.25 [0 - 13]</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">58,058</td>
+      <td class="num" bgcolor="white">32,430</td>
+    </tr>
+    <tr>
+      <td bgcolor="white">
+         <a name="cwi_33949_165318"></a>
+         <a href="ftp://ftp.inrialpes.fr/pub/vasy/benchmarks/vlts/cwi_33949_165318.bcg.bz2">cwi_33949_165318</a>
+      </td>
+      <td width="0" bgcolor="white"></td>
+      <td class="num" bgcolor="white">33,949,609</td>
+      <td class="num" bgcolor="white">165,318,222</td>
+      <td bgcolor="white"></td>
+      <td class="num" bgcolor="white">74,133,306</td>
+      <td class="num" bgcolor="white">31</td>
+      <td class="num" bgcolor="white">4.87 [1 - 17]</td>
+      <td class="bool" bgcolor="white">-</td>
+      <td class="bool" bgcolor="white">X</td>
+      <td class="bool" bgcolor="white"><i>-</i></td>
+      <td class="bool" bgcolor="white">VLTS-1</td>
+      <td class="num" bgcolor="white">312,337</td>
+      <td class="num" bgcolor="white">240,432</td>
+    </tr>
+    </tbody></table>
+    </td></tr>
+    </tbody></table>
+
+<p>
+<a name="note_720_390"><sup>*</sup>
+<b>Note:</b> 
+	Benchmark "vasy_720_390" is not a connected graph: there are states and
+ transitions that cannot be reached from the initial state. 
+	This fact is clear as the number of states is greater than the number 
+of transitions, and is also confirmed by the </a><a href="https://cadp.inria.fr/man/bcg_info.html"><b>bcg_info</b></a> tool with option <b>-unreachable</b>:
+ states 87,739...720,126 and 720,128...720,246 are unreachable (there 
+are only 87,740 reachable states and 390,510 reachable transitions).
+	This benchmark is included to make sure that tools operating on VLTSs 
+handle disconnected graphs properly (i.e., that they do not crash nor 
+loop indefinitely).
+	There are two main reasons for this requirement: (1) the usual 
+definition of Labelled Transition Systems given in most scientific 
+papers and textbooks is not restricted to connected graphs, 
+	and (2) in practice, disconnected graphs are produced by distributed 
+state space generation algorithms, which construct the global state 
+space as a collection of several disconnected graph fragments (see, 
+e.g., the definition of a <a href="https://cadp.inria.fr/publications/Garavel-Mateescu-Smarandache-01.html">partitioned LTS</a>).
+
+</p><p>
+The diagram below summarizes facts about the dispersion of the VLTS-1 
+benchmarks. The average branching factor is equal to the number of 
+transitions divided by the number of states. To obtain a diagram of 
+reasonable size, the three benchmarks with the highest branching factor 
+are represented with a lower ordinate (Y-axis) than actually.
+
+</p><center>
+<img src="The%20VLTS%20Benchmark%20Suite_files/vlts_1.gif" alt="VLTS-1 dispersion diagram">
+</center>
+
+<p>
+<table>
+<tbody><tr>
+<td>
+<a href="http://www.win.tue.nl/~fvham/fsm/vlts"><img src="The%20VLTS%20Benchmark%20Suite_files/lts_2.jpg"></a>
+</td>
+<td align="center">
+For some of the above benchmarks, you can find <a href="http://www.win.tue.nl/~fvham/fsm/vlts">here</a> a fancy graphical visualization provided by Jan Friso Groote and Frank van Ham (Technical University of Eindhoven).
+</td>
+<td>
+<a href="http://www.win.tue.nl/~fvham/fsm/vlts"><img src="The%20VLTS%20Benchmark%20Suite_files/lts_4.jpg"></a>
+</td>
+</tr>
+</tbody></table>
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2><a name="section-5"></a> 5. History of versions - Contributors</h2>
+
+<ul>
+<li><b>March 12, 2003:</b>
+<br>
+Version 1 of the VLTS benchmark suite (<b>VLTS-1</b>) was made available on the VASY FTP server.
+VLTS-1 contains 40 benchmarks provided by <b>Stefan Blom</b> (CWI/SEN2) and <b>Hubert Garavel</b>
+ (INRIA/VASY).
+These benchmarks have been produced automatically from formal 
+descriptions of real-life concurrent systems using the muCRL tools of 
+CWI/SEN2 and the CAESAR/CAESAR.ADT compilers of INRIA/VASY.
+<b>Damien Bergamini</b> (INRIA/VASY) prepared the benchmarks and developed the <b>bcg_scramble</b> tool.
+
+<p> </p></li><li><b>July 31, 2003:</b>
+<br>
+The present Web Page was written by <b>Nicolas Descoubes</b> (INRIA/VASY) (Section 4) and <b>Hubert Garavel</b> (all other Sections).
+
+<p> </p></li><li><b>August 1st-September 4, 2003:</b>
+<ul>
+	<li> The present Web Page was updated in many places by <b>Hubert Garavel</b> to reflect corrections suggested by <b>Stefan Blom</b>, <b>Nicolas Descoubes</b>, <b>Frank van Ham</b> (Technical University of Eindhoven), and <b>Christophe Joubert</b> (INRIA/VASY).
+	</li><li> Graph pictures provided by <b>Frank van Ham</b> were included, together with a link to the <a href="http://www.win.tue.nl/~fvham/fsm/vlts">VLTS-related Web page</a> at the Technical University of Eindhoven.
+	</li><li> After <b>Stefan Blom</b> initiated a discussion on compression techniques, <b>Damien Bergamini</b>, <b>Nicolas Descoubes</b>, and <b>Hubert Garavel</b> managed to reduce the disk space needed to store all the "<b>.bcg.bz2</b>" files of the VLTS-1 benchmark suite from 819,654 down to 465,018 kB. 
+</li></ul>
+
+<p> </p></li><li><b>September 25, 2003:</b>
+<br>
+A diagram summarizing the dispersion of the VLTS-1 benchmarks was added by <b>Damien Bergamini</b> and <b>Hubert Garavel</b>.
+
+<p> </p></li><li><b>January 24, 2005:</b>
+<br>
+<b>Martin Leucker</b> (TU Munich) and two of his students provided the 
+missing entries of the VLTS table below, namely the existence/absence of
+ livelocks for the four largest benchmarks vasy_8082_42933, 
+vasy_11026_24660, vasy_12323_27667, and cwi_33949_165318.
+
+<p> </p></li><li><b>February 16, 2005:</b>
+<br>
+<b>Damien Bergamini</b>, <b>David Champelovier</b>, and <b>Hubert Garavel</b> added <a href="#annex-C">Annex C</a> containing bibliographic references to papers referencing the VLTS benchmark suite.
+
+<p> </p></li><li><b>October 24, 2008:</b>
+<br>
+<b>Louis Paternault</b> and <b>Hubert Garavel</b> updated <a href="#annex-C">Annex C</a> by adding eight recent bibliographic references.
+
+<p> </p></li><li><b>December 4, 2009:</b>
+<br>
+<a href="#annex-B">Annex B</a> was shortened as the <b>bcg_scramble</b> tool is now part of <b>bcg_labels</b> and can be invoked as <b>bcg_labels -scramble</b>.
+
+<p> </p></li><li><b>March 3, 2013:</b>
+<br>
+The official URL of the VLTS Web page was changed into <b><a href="https://cadp.inria.fr/resources/vlts">http://cadp.inria.fr/resources/vlts</a></b>. The former URL (<font color="blue">http://www.inrialpes.fr/vasy/cadp/resources/benchmark_bcg.html</font>) and its variants are kept for backward compatibility, but their use is discouraged.
+
+<p> </p></li><li><b>March 3, 2013:</b>
+<br>
+<b>Hubert Garavel</b> added 15 new bibliographic references in <a href="#annex-C">Annex C</a> of this Page.
+
+<p> </p></li><li><b>April 6, 2014:</b>
+<br>
+<b>Hubert Garavel</b> added 2 new bibliographic references in <a href="#annex-C">Annex C</a> of this Page.
+
+<p> </p></li><li><b>June 2, 2015:</b>
+<br>
+<b>Hubert Garavel</b> permuted Sections 4 and 5, and added one new bibliographic reference in <a href="#annex-C">Annex C</a> of this Page.
+
+<p> </p></li><li><b>December 4, 2016:</b>
+<br>
+<b>Hubert Garavel</b> added 4 new bibliographic references in <a href="#annex-C">Annex C</a> of this Page.
+
+<p> </p></li><li><b>November 17, 2017:</b>
+<br>
+The VLTS benchmark suite now has a DOI: <a href="https://doi.org/10.18709/perscido.2017.11.ds100">10.18709/perscido.2017.11.ds100</a>.
+
+<p> </p></li><li><b>November 23, 2018:</b>
+<br>
+<b>Hubert Garavel</b> added 3 new bibliographic references in <a href="#annex-C">Annex C</a> of this Page. Thanks to David N. Jansen (Radboud University, Nijmegen) for pointing out a new paper. 
+
+</li></ul>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+
+<h2><a name="annex-A"></a> Annex A. How to donate new benchmarks? </h2>
+
+<p>
+We plan to extend the benchmark suite in the future. We are therefore interested in getting new benchmarks of various origins.
+
+</p><p>
+However, due to the limited capacity of our ftp site, a selection might be needed before including new benchmarks.
+
+</p><p>
+If you plan to donate new benchmarks, please keep in mind the following guidelines:
+
+</p><ul>
+<li> New benchmarks should be produced from real-life examples, rather 
+than crafted by hand: the benchmark suite is designed to feature average
+ case rather than worst case complexity. 
+
+<p> </p></li><li> New benchmarks should be significantly different from 
+the existing ones, in terms of size and/or structure  (branching factor,
+ number of labels, number of tau-transitions, etc.).
+
+<p> </p></li><li> Due to space limitations, the benchmark suite does not
+ allow for "scalable" benchmarks: if you have a family of transition 
+systems derived from the same example by varying certain parameters, 
+only a single one should be selected for the benchmark suite.
+
+<p> </p></li><li> New benchmarks should be encoded in the BCG format. This can be done using either the <a href="https://cadp.inria.fr/man/bcg_write.html"><b>bcg_write</b></a> API or the 
+<a href="https://cadp.inria.fr/man/bcg_io.html"><b>bcg_io</b></a> tool. You might wish to use the 
+<a href="#annex-B"><b>bcg_labels</b></a> tool (described below) to remove sensitive information from label strings.
+Then, the BCG file should be compressed using <a href="http://sources.redhat.com/bzip2"><b>bzip2</b></a> with option <b>-9</b>.
+
+<p> </p></li><li> Finally, you should put the resulting "<b>.bcg.bz2</b>" file on an FTP or HTTP server and send the corresponding URL to <b>Hubert.Garavel@inria.fr</b>. Do not send the file itself as large messages are usually rejected by mail agents.
+</li></ul>
+
+<p>
+Please keep in mind that we will not update the benchmark suite every 
+time a new benchmark is donated. We will wait to have a critical mass of
+ new benchmarks before issuing a new version of the benchmark suite.
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2> <a name="annex-B"></a> Annex B. How to scramble BCG graphs?</h2>
+
+<p>
+The <b>bcg_labels</b> tool with its <b>-scramble</b> option can be used 
+to remove information contained in the labels of a BCG graph.
+This enables to donate a benchmark produced from an industrial case 
+study without revealing intellectual property covered by non-disclosure 
+agreements.
+Option <b>-scramble</b> is available since CADP BETA-VERSION 2008-g (December 2009).
+See the
+<a href="https://cadp.inria.fr/man/bcg_labels.html">bcg_labels</a>
+manual page for more information.
+
+</p><p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+<h2> <a name="annex-C"></a> Annex C. Scientific publications using the VLTS
+benchmark suite</h2>
+
+This Annex gives a (non exhaustive) list of publications referencing the
+ VLTS benchmark suite. Please, let us know if you are aware of further 
+references.
+
+<ol>
+<li>
+<b>Stefan Blom</b>, <b>Izak van Langevelde</b>, and <b>Bert Lisser</b>.
+<i>Compressed and Distributed File Formats for Labeled Transition Systems</i>.
+Proceedings PDMC'03 (Boulder, Colorado, USA), Electronic Notes in 
+Theoretical Computer Science (ENTCS), vol. 89, num. 1, Elsevier, 2003.
+<!-- http://www.elsevier.com/gej-ng/31/29/23/141/47/show/Products/notes/index.htt\#007 -->
+</li><br>
+
+<li>
+<b>Stefan Blom</b> and <b>Simona Orzan</b>.
+<i>Distributed State Space Minimization</i>
+Early version: Proceedings FMICS'03 (Roros, Norway), Electronic Notes in
+ Theoretical Computer Science (ENTCS), vol. 80, Elsevier, Jun. 2003.
+<!-- http://www1.elsevier.com/gej-ng/31/29/23/137/23/show/Products/notes/index.htt\#008 -->
+Full version: Software Tools for Technology Transfer (STTT), vol. 7, num. 3, Springer, 2005.
+</li><br>
+
+<li>
+<b>Fredrik Holmén</b>, <b>Martin Leucker</b>, and <b>Marcus Lindstrom</b>.
+<i>UppDMC: A Distributed Model Checker for Fragments of the mu-Calculus</i>.
+Proceedings PDMC'04 (London, U.K.), Electronic Notes in Theoretical Computer Science (ENTCS), Sept. 2004.
+</li><br>
+
+<li>
+<b>Christophe Joubert</b> and <b>Radu Mateescu</b>.
+<i>Distributed On-the-Fly Equivalence Checking</i>.
+Proceedings PDMC'04 (London, U.K.), Electronic Notes in Theoretical Computer Science (ENTCS), Sept. 2004.
+</li><br>
+
+<li>
+<b>Yanhong A. Liu</b>, <b>Tom Rothamel</b>, <b>Fuxiang Yu</b>, <b>Scott D. Stoller</b>, and <b>Nanjun Hu</b>.
+<i>Parametric Regular Path Queries</i>.
+Proceedings of PLDI'2004, ACM SIGPLAN Notices, vol. 39, num. 6, May 2004. 
+</li><br>
+
+<li>
+<b>Carla Piazza</b> and <b>Alberto Policriti</b>.
+<i>Ackermann Encoding, Bisimulations, and OBDDs</i>.
+Full version: Theory and Practice of Logic Programming (TPLP) vol. 4, num. 5-6, pp. 695-718, 2004.
+</li><br>
+
+<li>
+<b>Simona Orzan</b>.
+<i>On Distributed Verification and Verified Distribution</i>.
+PhD thesis, defended on Nov. 25, 2004, at the Free University of Amsterdam.
+</li><br>
+
+<li>
+<b>Stefan Blom</b> and <b>Simona Orzan</b>.
+<i>A Distributed Algorithm for Strong Bisimulation Reduction of State Spaces</i>.
+Early version: Proceedings PDMC'02 (Brno, Czech Republic), Electronic 
+Notes in Theoretical Computer Science (ENTCS), vol. 68, num. 4, 
+Elsevier, Aug. 2002.
+Full version: Software Tools for Technology Transfer (STTT), vol. 7, 
+num. 1, pp 74-86, Springer, 2005.
+</li><br>
+
+<li>
+<b>Damien Bergamini</b>, <b>Nicolas Descoubes</b>, <b>Christophe Joubert</b>, and <b>Radu Mateescu</b>.
+<i>BISIMULATOR: A Modular Tool for On-the-Fly Equivalence Checking</i>.
+Proceedings of the 11th International Conference on Tools and Algorithms
+ for the Construction and Analysis of Systems TACAS'2005 (Edinburgh, 
+Scotland), volume 3440 of Lecture Notes in Computer Science, pp. 
+581-585. Springer Verlag, April 2005.
+</li><br>
+
+<li>
+<b>Hubert Garavel</b>, <b>Radu Mateescu</b>, <b>Damien Bergamini</b>, <b>Adrian Curic</b>, <b>Nicolas Descoubes</b>, <b>Christophe Joubert</b>, <b>Irina Smarandache-Sturm</b> and <b>Gilles Stragier</b>.
+<i>DISTRIBUTOR and BCG_MERGE: Tools for Distributed Explicit State Space Generat
+ion</i>.
+Proceedings of the 12th International Conference on Tools and Algorithms
+ for the Construction and Analysis of Systems TACAS'2006 (Vienna, 
+Austria), volume 3920 of Lecture Notes in Computer Science, pp. 445-449.
+ Springer Verlag, Mar.-Apr. 2006.
+</li><br>
+
+<li>
+<b>Jan Friso Groote</b> and <b>Frank van Ham</b>.
+<i>Interactive Visualization of Large State Spaces</i>.
+Early version: Eindhoven University of Technology, Department of Computer Science, CS-Report 02-14, 2002.
+Full version: Software Tools for Technology Transfer (STTT), vol. 8, num. 1, pp. 77-91, 2006. 
+</li><br>
+
+<li>
+<b>Christophe Joubert</b> and <b>Radu Mateescu</b>.
+<i>Distributed On-the-Fly Model Checking and Test Case Generation</i>.
+Proceedings of SPIN'2006 (Vienna, Austria), LNCS 3923, pp 126-145, Apr. 2006.
+</li><br>
+
+<li>
+<b>María del Mar Gallardo</b>, <b>Christophe Joubert</b> and <b>Pedro Merino</b>.
+<i>On-the-Fly Data Flow Analysis based on Verification Technology</i>.
+Proceedings of the 6th International Workshop on Compiler Optimization 
+meets Compiler Verification COCV'2007 (Braga, Portugal), Mar. 2007.
+</li><br>
+
+<li>
+<b>María del Mar Gallardo</b>, <b>Christophe Joubert</b>, <b>Pedro Merino</b> and <b>David Sanán</b>.
+<i>C.OPEN and ANNOTATOR: Tools for On-the-Fly Model Checking C Programs</i>.
+Proceedings of the 14th International SPIN Workshop on Model Checking of Software SPIN'07 (Berlin, Germany), Jul. 2007.
+</li><br>
+
+<li>
+<b>Jirí Barnat</b>, <b>Jakub Chaloupka</b>, and <b>Jaco van de Pol</b>.
+<i>Improved Distributed Algorithms for SCC Decomposition</i>.
+In: Proceedings of the 6th International Workshop on Parallel and 
+Distributed Methods in verifiCation, 8 Jul 2007, Berlin. pp. 63-77. 
+Electronic Notes in Theoretical Computer Science 198 (1). Elsevier. ISSN
+ 1571-0661
+</li><br>
+
+<li>
+<b>Johan Oudinet</b>
+<i>Uniform Random Walks in Very Large Models</i>.
+Proceedings of the 2nd International Workshop on Random Testing RT'07, pp. 26-29, Atlanta, GA, USA, Nov. 2007. ACM Press.
+</li><br>
+
+<li>
+<b>Francesco Ranzato</b> and <b>Francesco Tapparo</b>.
+<i>Generalizing the Paige-Tarjan Algorithm by Abstract Interpretation</i>.
+Information and Computation, vol. 206, num. 5, pp. 620-651, 2008.
+</li><br>
+
+<li>
+<b>Katia Hristova</b>, <b>Yanhong A. Liu</b>, and <b>K. Tuncay Tekle</b>.
+<i>Generating Specialized Rules and Programs for Demand-Driven Analysis</i>.
+Proceedings of the 12th international conference on Algebraic Methodology and So
+ftware Technology, AMAST 2008 (Urbana, IL, USA), Jul. 2008.
+</li><br>
+
+<li>
+<b>Radu Mateescu</b> and <b>Anton Wijs</b>.
+<i>Efficient On-the-Fly Computation of Weak Tau-Confluence</i>.
+INRIA Research Report RR-7000, Jul. 2009.
+</li><br>
+
+<li>
+<b>Johan Oudinet</b>
+<i>Exploration aléatoire de modèles</i>.
+Journal Européen des Systèmes Automatisés, vol. 43, num. 7-9, pp.905-919, 2009.
+</li><br>
+
+<li>
+<b>Silvia Crafa</b>, <b>Francesco Ranzato</b>, and <b>Francesco Tapparo</b>.
+<i>Saving Space in a Time Efficient Simulation Algorithm</i>.
+Proceedings of the 9th International Conference on Application of 
+Concurrency to System Design (ACSD'09), pp. 60-69, 2009. IEEE Computer 
+Society.
+</li><br>
+
+<li>
+<b>Weisong Li</b>.
+<i>Algorithms for Computing Weak Bisimulation Equivalence</i>.
+Proceedings of the 3rd IEEE International Symposium on Theoretical Aspects of Software Engineering (TASE'09), Jul. 2009.
+</li><br>
+
+<li>
+<b>Radu Mateescu</b> and <b>Anton Wijs</b>.
+<i>Hierarchical Adaptive State Space Caching Based on Level Sampling</i>.
+Proceedings of the 15th International Conference on Tools and Algorithms
+ for the Construction and Analysis of Systems (TACAS'09), York, UK, Mar.
+ 2009.
+</li><br>
+
+<li>
+<b>Johan Oudinet</b>, <b>Alain Denise</b>, and <b>Marie-Claude Gaudel</b>.
+<i>A New Dichotomic Algorithm for the Uniform Random Generation of Words in Regular Languages</i>.
+Proceedings of the Conference on Random and Exhaustive Generation of 
+Combinatorial Objects (GASCom), Montreal, Canada, Sept. 2010.
+Journal version: Theoretical Computer Science, vol. 502, Sep. 2013, pp. 
+165-176.
+</li><br>
+
+<li>
+<b>Francesco Ranzato</b> and <b>Francesco Tapparo</b>.
+<i>An Efficient Simulation Algorithm based on Abstract Interpretation</i>.
+Information and Computation, vol. 208, issue 1, pp. 1-22, 2010.
+</li><br>
+
+<li>
+<b>Lubos Brim</b>, <b>Jaco van de Pol</b>, <b>Hidde de Jong</b>, and <b>Radu Mateescu</b>.
+<i>Distributed Model Checking Algorithms Devised and Implemented</i>.
+Deliverable D3-4 of the European project EC-MOAN, 2010.
+</li><br>
+
+<li>
+<b>Johan Oudinet</b>.
+<i>Approches combinatoires pour le test statistique à grande échelle</i>.
+Thèse de doctorat, Université Paris-Sud 11, France, Nov. 2010. 
+English summary available as: Johan Oudinet, Random Exploration of 
+Models, Research Report 1534, Laboratoire de Recherche en Informatique, 
+Orsay, France. 
+</li><br>
+
+<li>
+<b>Jakub Chaloupka</b>.
+<i>Algorithms for Mean-Payoff and Energy Games</i>.
+PhD thesis, Faculty of Informatics, Masaryk University, Brno, Czech Republic, Feb. 2011.
+</li><br>
+
+<li>
+<b>Jirí Barnat</b>, <b>Jakub Chaloupka</b>, and <b>Jaco van de Pol</b>.
+<i>Distributed algorithms for SCC Decomposition</i>.
+Journal of Logic and Computation, vol. 21, num. 1, pp. 23-44. Oxford University Press, 2011.
+</li><br>
+
+<li>
+<b>Marie-Claude Gaudel</b>.
+<i>Counting for Random Testing</i>.
+Proceedings of the 23rd IFIP WG 6.1 International Conference on Testing 
+Software and Systems (ICTSS'11), Paris, France, Nov. 2011.
+</li><br>
+
+<li>
+<b>Maria del Mar Gallardo</b>, <b>Christophe Joubert</b>, <b>Pedro Merino</b>, and <b>David Sanán</b>.
+<i>A Model-extraction Approach to Verifying Concurrent C Programs with CADP</i>.
+Science of Computer Programming, vol. 77, num. 3, pp. 375-392, Mar. 2012.
+</li><br>
+
+<li>
+<b>Alain Denise</b>, <b>Marie-Claude Gaudel</b>, <b>Sandrine-Dominique Gouraud</b>, <b>Richard Lassaigne</b>, <b>Johan Oudinet</b>, and <b>Sylvain Peyronnet</b>.
+<i>Coverage-biased Random Exploration of Large Models and Application to Testing</i>.
+Software Tools for Technology Transfer, vol. 14, num. 1, pp. 73-93, 2012.
+</li><br>
+
+<li>
+<b>Alexander Ditter</b>, <b>Milan Ceska</b>, and <b>Gerald Lüttgen</b>. 
+<i>On Parallel Software Verification Using Boolean Equation Systems</i>.
+Proceedings of the 19th International Workshop on Model Checking Software (SPIN'12), Oxford, UK, Jul. 2012.
+</li><br>
+
+<li>
+<b>Radu Mateescu</b> and <b>Anton Wijs</b>.
+<i>Sequential and Distributed On-the-fly Computation of Weak Tau-confluence</i>.
+Science of Computer Programming, vol. 77, num. 10-11, pp. 1075-1094, Sep. 2012.
+</li><br>
+
+<li>
+<b>Javier Cámara</b>, <b>Gwen Salaün</b>, <b>Carlos Canal</b>, and <b>Meriem Ouederni</b>.
+<i>Interactive specification and verification of behavioral adaptation contracts</i>.
+Information and Software Technology, vol. 54, num. 7, pp. 701-723, 2012.
+</li><br>
+
+<li>
+<b>Rafal Somla</b>.
+<i>Logics and Algorithms for Verification of Concurrent Systems</i>.
+PhD dissertation presented at Uppsala University, Faculty of Science and
+Technology, Oct. 2012.
+</li><br>
+
+<li>
+<b>Gérard Cécé</b>.
+<i>Three Simulation Algorithms for Labelled Transition Systems</i>.
+The Computing Research Repository (CoRR), arXiv:1301.1638, Jan. 2013.
+</li><br>
+
+<li>
+<b>Konrad Kulakowski</b>
+<i>Concurrent Bisimulation Algorithm</i>.
+arXiv:1311.7635 [cs.LO], Jan. 2014.
+</li><br>
+
+<li>
+<b>Carlos Gregorio-Rodríguez</b>, <b>Luis Llana</b>, <b>Rafael Martínez-Torres</b>.
+<i>Extending mCRL2 with Ready Simulation and iocos Input-Output Conformance Simulation</i>.
+Proceedings of the ACM Symposium on Applied Computing, Software 
+Verification and Testing track (SAC-SVT'15), Salamanca, Spain, Apr. 
+2015.
+</li><br>
+
+<li>
+<b>Jan Friso Groote</b> and <b>Anton Wijs</b>.
+<i>An O(m log n) Algorithm for Stuttering Equivalence and Branching Bisimulation</i>.
+Proceedings of the International Conference on Tools and Algorithms for 
+the Construction and Analysis of Systems (TACAS'16), Lecture Notes in 
+Computer Science, vol. 9636, pp. 607-624, Springer, April 2016.
+</li><br>
+
+<li>
+<b>Alexandre Boulgakov</b>, <b>Thomas Gibson-Robinson</b>, and <b>A. W. Roscoe</b>.
+<i>Computing Maximal Weak and Other Bisimulations</i>.
+Formal Aspects of Computing, vol. 28, issue 3, pp. 381-407, May 2016.
+</li><br>
+
+<li>
+<b>Anton Wijs</b>.
+<i>BFS-Based Model Checking of Linear-Time Properties with an Application on GPUs</i>.
+Proceedings of the International Conference on Computer Aided 
+Verification (CAV'16), Lecture Notes in Computer Science, vol. 9780, pp.
+ 472-493, Springer, July 2016.
+</li><br>
+
+<li>
+<b>Jeroen Vonk</b>.
+<i>Bisimulation Reduction with MapReduce</i>.
+Computer Science Master Thesis, University of Twente (Electrical Engineering, Mathematics and Computer Science), August 2016.
+</li><br>
+
+<li>
+<b>Jan Friso Groote</b>, <b>David N. Jansen</b>, <b>Jeroen J. A. Keiren</b>, and <b>Anton Wijs</b>.
+<i>An O(m log n) Algorithm for Computing Stuttering Equivalence and Branching Bisimulation</i>.
+ACM Transactions on Computational Logic (TOCL), vol. 18 issue 2, June 2017.
+</li><br>
+
+<li>
+<b>Benjamin Bisping</b>.
+<i>Computing Coupled Similarity</i>.
+Master's Thesis, Technische Universität Berlin, April 2018.
+</li><br>
+
+<li>
+<b>Krishnendu Chatterjee</b>, <b>Monika Henzinger</b>, <b>Veronika Loitzenbauer</b>, <b>Simin Oraee</b>, and <b>Viktor Toman</b>.
+<i>Symbolic Algorithms for Graphs and Markov Decision Processes with Fairness Objectives</i>.
+Proceedings of the 30th International Conference on Computer Aided 
+Verification (CAV'18), Lecture Notes in Computer Science, vol. 10982, 
+pp. 178-197, Springer, August 2018.
+</li><br>
+
+<li>
+<b>Zheng Xiao-Lin</b>, <b>Deng Yu-Xin</b>, <b>Fu Chen</b>, and <b>Lei Guo-Qing</b>. 
+<i>Extension and Implementation of the Quasi-Local Algorithm for Checking Bisimilarity</i>.
+Ruan Jian Xue Bao / Journal of Software, vol. 29, num. 6, pp. 1517-1526 (in Chinese), 2018. DOI: 10.13328/j.cnki.jos.005461.
+</li><br>
+
+</ol>
+
+<p>
+See also:
+
+</p><ul>
+<li><a href="http://www.fi.muni.cz/~xpelanek/state_spaces/">Properties of State Spaces</a> by <b>Radek Pelanek</b> (Masaryk University Brno) </li>
+
+<br>
+<li><a href="http://www.cs.indiana.edu/formal-methods-education/Examples/">Formal Methods Education Resources - Examples Page</a> by <b>Kathi Fisler</b> (Worcester Polytechnic Institute) </li>
+</ul>
+
+<p>
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+
+Version 1.85 - Last updated 2019/01/15 16:07:22
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+
+<br>
+<a href="https://cadp.inria.fr/"><img src="The%20VLTS%20Benchmark%20Suite_files/left.gif" align="MIDDLE"> Back to the CADP Home Page </a>
+
+</div>
+
+
+</body></html>
