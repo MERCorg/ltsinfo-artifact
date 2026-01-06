@@ -29,13 +29,13 @@ def main():
         print("bcg_io tool not found in CADP bin directory", file=sys.stderr)
         sys.exit(1)
 
-    # for p in args.directory.glob("*.bz2"):
-    #     print(f"Converting {p}")
+    for p in args.directory.glob("*.bz2"):
+        print(f"Converting {p}")
 
-    #     # Unpack the bz2 file
-    #     out = p.with_name(p.name[:-4])  # strip trailing ".bz2"
-    #     with bz2.open(p, "rb") as fin, out.open("wb") as fout:
-    #         fout.write(fin.read())
+        # Unpack the bz2 file
+        out = p.with_name(p.name[:-4])  # strip trailing ".bz2"
+        with bz2.open(p, "rb") as fin, out.open("wb") as fout:
+            fout.write(fin.read())
 
     for p in args.directory.glob("*.bcg"):
         print(f"Converting {p} to .aut format")
