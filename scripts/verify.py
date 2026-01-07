@@ -30,6 +30,7 @@ def main():
                 [
                     ltscompare_exe,
                     "-ebisim",
+                    "--tau=i",
                     os.path.join(SCRIPT_PATH, args.left, file),
                     os.path.join(SCRIPT_PATH, args.right, file),
                 ],
