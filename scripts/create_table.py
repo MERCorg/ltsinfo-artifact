@@ -11,7 +11,7 @@ def print_gb(value):
 
 
 def average(timings: list[float]) -> float:
-    """ Compute the average solving time in milliseconds from a list of timing results. """
+    """Compute the average solving time in milliseconds from a list of timing results."""
     total = 0.0
 
     for result in timings:
@@ -43,10 +43,10 @@ def natural_sort(l):
     alphanum_key = lambda key: [convert(c) for c in re.split("([0-9]+)", key)]
     return sorted(l, key=alphanum_key)
 
-def read_results(filename: str) -> dict:
 
+def read_results(filename: str) -> dict:
     results = {}
-    
+
     with open(filename, "r", encoding="utf-8") as json_file:
         # Read line by line and parse each line as JSON
         for line in json_file:
@@ -56,14 +56,15 @@ def read_results(filename: str) -> dict:
             if name not in results:
                 results[name] = {
                     "total_time": [json_data["total_time"]],
-                    "reduction": [json_data["reduction"]]
+                    "reduction": [json_data["reduction"]],
                 }
             else:
                 # Append to the existing data.
                 results[name]["total_time"].append(json_data["total_time"])
                 results[name]["reduction"].append(json_data["reduction"])
-                    
+
     return results
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -72,15 +73,17 @@ def main():
         epilog="",
     )
 
-    parser.add_argument(
-        "input", action="store", type=str
-    )
+    parser.add_argument("input", action="store", type=str)
 
     args = parser.parse_args()
 
     mcrl2_results = read_results(os.path.join(args.input, "mcrl2_branching-bisim.json"))
-    ltsmin_results = read_results(os.path.join(args.input, "ltsmin_branching-bisim.json"))
-    ltsinfo_results = read_results(os.path.join(args.input, "ltsinfo_branching-bisim.json"))
+    ltsmin_results = read_results(
+        os.path.join(args.input, "ltsmin_branching-bisim.json")
+    )
+    ltsinfo_results = read_results(
+        os.path.join(args.input, "ltsinfo_branching-bisim.json")
+    )
 
     # Read all the benchmark names.
     benchmarks = []
@@ -90,6 +93,7 @@ def main():
     benchmarks = natural_sort(benchmarks)
 
     print("\\begin{tabular}{r || r | r || r | r | r || r | r | r}")
+    print("case & mCRL2 & ltsmin & ltsinfo & mCRL2 & ltsmin & ltsinfo \\")
     print(
         "\\multicolumn{1}{c||}{} & \\multicolumn{3}{c||}{Total time (\\textbf{s})} & \\multicolumn{3}{c||}{Reduction time (\\textbf{s})}\\\\"
     )
@@ -107,12 +111,18 @@ def main():
             print(" \\\\")
         outer_first = False
 
+        # Figure out the lowest time.
         minimum_index = min(
             range(len(total_times)),
             key=lambda i: total_times[i]
             if not math.isnan(total_times[i])
             else float("inf"),
         )
+
+        # Print the benchmark name
+        print(f"{print_escaped(benchmark)} & ", end="")
+
+        # Print the total time
         first = True
         for i, result in enumerate(total_times):
             if not first:
@@ -131,12 +141,15 @@ def main():
             average(ltsinfo_results.get(benchmark, {}).get("reduction", float("NaN"))),
         ]
 
+        # Figure out the lowest time.
         minimum_index = min(
             range(len(reduction_times)),
             key=lambda i: reduction_times[i]
             if not math.isnan(reduction_times[i])
             else float("inf"),
         )
+
+        # Print the reduction time
         first = True
         for i, result in enumerate(reduction_times):
             if not first:
