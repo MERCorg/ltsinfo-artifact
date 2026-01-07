@@ -29,7 +29,7 @@ def main():
         help="Directory that contains the LTS files to benchmark",
     )
     parser.add_argument(
-        dest="ltsconvert_binpath", action="store", type=str, required=True
+        dest="ltsconvert_binpath", action="store", type=str
     )
     parser.add_argument(
         dest="runs",
@@ -40,12 +40,12 @@ def main():
     parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
-    ltsconvert_bin = shutil.which("ltsconvert", args.ltsconvert_binpath)
+    ltsconvert_bin = shutil.which("ltsconvert", path=args.ltsconvert_binpath)
 
     for alg in ["branching-bisim"]:
         os.makedirs(os.path.join(args.output_dir, f"mcrl2_{alg}"), exist_ok=True)
 
-        for run in range(1, args.runs):
+        for run in range(0, args.runs):
             for file in args.lts_dir.glob("*.aut"):
                 print(f"Run {run}: Benchmarking {file} with mcrl2 {alg}")
                 (output, time, memory) = run_experiment(
@@ -59,7 +59,7 @@ def main():
                         os.path.join(args.output_dir, f"mcrl2_{alg}", os.path.basename(file)),
                     ]
                 )
-                run_result = {"file": str(file), "total_time": time, "memory": memory, "output": output}
+                run_result = {"experiment": os.path.basename(file), "total_time": time, "memory": memory, "output": output}
 
                 for line in output:
                     result = TIMING_REGEX.match(line)

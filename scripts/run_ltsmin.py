@@ -61,7 +61,7 @@ def main():
                     ]
                 )
                 run_result = {
-                    "file": str(file),
+                    "experiment": os.path.basename(file),
                     "total_time": time,
                     "memory": memory,
                     "output": output,

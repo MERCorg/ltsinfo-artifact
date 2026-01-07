@@ -60,7 +60,7 @@ def main():
                         os.path.join(args.output_dir, f"ltsinfo_{alg}", os.path.basename(file)),
                     ]
                 )
-                run_result = {"total_time": time, "memory": memory, "output": output}
+                run_result = {"experiment": os.path.basename(file), "total_time": time, "memory": memory, "output": output}
 
                 for line in output:
                     result = TIMING_REGEX.match(line)
