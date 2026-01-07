@@ -41,7 +41,7 @@ RUN mkdir /root/mCRL2/build && cd /root/mCRL2/build && cmake . \
 
 # Build the toolset and install it such that the tools are available on the PATH
 ARG THREADS=8
-RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert
+RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert ltscompare
 
 # Build ltsmin from source
 COPY ./ltsmin /root/ltsmin/
@@ -70,6 +70,3 @@ RUN cd /root/ltsinfo/ \
 
 # Copy the scripts
 COPY ./scripts/ /root/scripts/
-
-# Run the preparation scripts
-RUN python3 /root/scripts/generate_examples.py /root/lts/

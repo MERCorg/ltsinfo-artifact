@@ -2,7 +2,7 @@
 
 This is the artifact for TACAS 2026 paper.
 
-  > Jan J. Martens and Maurice Laveaux. Faster Signature Refinement for Branching Bisimilarity Minimization. TACAS 2026.
+  > Jan J.M. Martens and Maurice Laveaux. Faster Signature Refinement for Branching Bisimilarity Minimization. TACAS 2026.
 
 We compare the efficiency of branching bisimulation for three different implementations:
     - [ltsinfo](https://github.com/MERCorg/ltsinfo): Our new implementation described in the paper.
@@ -39,7 +39,8 @@ script:
 Alternatively, preconverted `.aut` files can be found in another
 [artifact](https://doi.org/10.6084/m9.figshare.11876688). They are in the
 `artifact/experiments/benchmarks` directory, and can be copied into the `lts/`
-directory.
+directory. From this we only use the `01_` to `32_` LTSs, since they correspond to
+the LTSs in the VLTS benchmark suite.
 
 ## Running the experiments
 
@@ -50,18 +51,32 @@ following command (from within the artifact directory):
     docker build -t ltsinfo_artifact .
 ```
 
-This should take about 20 minutes. Afterwards, we mount the `lts/` directory
-containing the `.aut` files, and the results directory to store the output. This
-can be done using the following command:
+This should take about 20 minutes. Alternatively, we provide a prebuilt image
+`ltsinfo_artifact.tar`, which can be loaded using the following command:
+
+```bash
+    docker image load -i ltsinfo_artifact.tar
+```
+
+Afterwards, we mount the `lts/` directory containing the `.aut` files, and the
+results directory to store the output. This can be done using the following
+command:
 
 ```bash
   docker run -it --mount type=bind,src=./lts/,dst=/root/lts/ --mount type=bind,src=./results/,dst=/root/results/ ltsinfo_artifact
 ``` 
 
-Within the docker container, the experiments can be run using the provided
-scripts. The following commands will run each of the three tools on all LTSs in
-the `/root/lts/` directory, using 5 repetitions for each LTS, and store the
-results in the `/root/results/` directory:
+First, we generate the example LTSs used in the paper using the provided script,
+they should appear in the `lts` on the host:
+
+```bash
+  python3 /root/scripts/generate_examples.py /root/lts/
+```
+
+While still being in the docker container, the experiments can be run using the
+provided scripts. The following commands will run each of the three tools on all
+LTSs in the `/root/lts/` directory, using 5 repetitions for each LTS, and store
+the results in the `/root/results/` directory:
 
 ```bash
   python3 /root/scripts/run_ltsinfo.py /root/lts/ /root/ltsinfo/target/release/ 5 /root/results/
@@ -71,8 +86,21 @@ results in the `/root/results/` directory:
 
 Each script will produce a separate JSON file in the results directory, containing
 the results for that tool. Furthermore, the `.aut` files after reduction are output into
-the results directory as well.
+the results directory as well. The full run takes about 2 hours.
+
+Afterwards, a LaTeX table can be created by using the
+corresponding script:
+
+```bash
+  python3 scripts/create_table.py /root/results/
+```
 
 ## Reusable
 
-The artifact contains the source code of `ltsinfo`, `ltsmin`, and `mCRL2`, a
+The artifact contains the source code of `ltsinfo`, `ltsmin`, and `mCRL2` tools,
+and the API documentation produced by rustdoc for `ltsinfo`. The reduction
+algorithm is implemented in `ltsinfo/crates/reduction/src`.
+
+Continued development of the tool takes place in the
+[MERC](https://github.com/MERCorg/merc) repository, where it is named
+`merc-lts`.
