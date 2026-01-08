@@ -77,6 +77,7 @@ class RunProcess:
         """
 
         try:
+            before = time.perf_counter()
             with subprocess.Popen(
                 [tool] + arguments,
                 stdout=subprocess.PIPE,
@@ -117,7 +118,6 @@ class RunProcess:
 
                 with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
                     # Wait for termination
-                    before = time.perf_counter()
                     future = executor.submit(enforce_limits, proc)
 
                     stdout, _ = proc.communicate()
