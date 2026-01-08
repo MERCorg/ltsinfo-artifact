@@ -97,14 +97,14 @@ hours.
 Afterward, a LaTeX table can be created using the corresponding script:
 
 ```bash
-python3 scripts/create_table.py /root/results/
+python3 /root/scripts/create_table.py /root/results/
 ```
 
-We have also included a `verify_results.py` script to verify that all tools
+We have also included a `verify.py` script to verify that all tools
 produce the same minimized LTS. It can be run as follows:
 
 ```bash
-python3 scripts/verify_results.py /root/mCRL2/build/stage/bin/ /root/results/ltsinfo_branching-bisim /root/results/mcrl2_branching-bisim
+python3 /root/scripts/verify.py /root/mCRL2/build/stage/bin/ /root/results/ltsinfo_branching-bisim /root/results/mcrl2_branching-bisim
 ```
 
 And similarly for the results in `ltsmin_branching-bisim`.
