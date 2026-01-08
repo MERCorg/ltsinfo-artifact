@@ -40,8 +40,7 @@ def main():
     parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
-    os.environ["PATH"] = args.ltsmin_binpath.strip() + os.pathsep + os.environ["PATH"]
-    ltsmin_exe = shutil.which("ltsmin-reduce")
+    ltsmin_exe = shutil.which("ltsmin-reduce", path=args.ltsmin_binpath.strip())
 
     for run in range(0, args.runs):
         for alg in ["branching-bisim"]:

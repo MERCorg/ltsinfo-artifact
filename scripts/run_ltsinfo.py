@@ -40,8 +40,7 @@ def main():
     parser.add_argument(dest="output_dir", action="store", type=Path)
 
     args = parser.parse_args()
-    os.environ["PATH"] = args.ltsinfo_binpath.strip() + os.pathsep + os.environ["PATH"]
-    ltsinfo_exe = shutil.which("ltsinfo")
+    ltsinfo_exe = shutil.which("ltsinfo", path=args.ltsinfo_binpath.strip())
     
     for alg in ["branching-bisim"]:
         # Time the Rust implementation.
