@@ -92,8 +92,11 @@ def main():
 
     benchmarks = natural_sort(benchmarks)
 
+    print("\\documentclass{standalone}")
+    print("\\begin{document}")
+    
     print("\\begin{tabular}{r || r | r || r | r | r || r | r | r}")
-    print("case & mCRL2 & ltsmin & ltsinfo & mCRL2 & ltsmin & ltsinfo \\")
+    print("case & mCRL2 & ltsmin & ltsinfo & mCRL2 & ltsmin & ltsinfo \\\\")
     print(
         "\\multicolumn{1}{c||}{} & \\multicolumn{3}{c||}{Total time (\\textbf{s})} & \\multicolumn{3}{c||}{Reduction time (\\textbf{s})}\\\\"
     )
@@ -164,6 +167,7 @@ def main():
     print("")
     print("\\end{tabular}")
 
+    print("\\end{document}")
 
 if __name__ == "__main__":
     main()
