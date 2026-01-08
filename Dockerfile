@@ -41,7 +41,7 @@ RUN mkdir /root/mCRL2/build && cd /root/mCRL2/build && cmake . \
 
 # Build the toolset and install it such that the tools are available on the PATH
 ARG THREADS=8
-RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert ltscompare
+RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert ltscompare ltsinfo
 
 # Build ltsmin from source
 COPY ./ltsmin /root/ltsmin/
