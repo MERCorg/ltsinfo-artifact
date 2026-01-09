@@ -130,4 +130,6 @@ compared to the existing tools.
 Continued development of the tool takes place in the
 [MERC](https://github.com/MERCorg/merc) repository, where it is named
 `merc-lts`. A generic `LTS` trait is used to decouple the reduction algorithms
-from the underlying LTS storage format.
+from the underlying LTS storage format. This should also facilitate the reuse
+of the algorithms in other software, by introducing new input formats or even
+integrating the algorithms into existing toolsets.
