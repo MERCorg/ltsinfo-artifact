@@ -1,0 +1,114 @@
+diff --git a/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_dnj.h b/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_dnj.h
+index 47e6d79fe9..a26ae75bd3 100644
+--- a/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_dnj.h
++++ b/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_dnj.h
+@@ -89,6 +89,7 @@
+ #include "mcrl2/lts/detail/check_complexity.h"
+ #include "mcrl2/lts/detail/fixed_vector.h"
+ #include "mcrl2/lts/detail/simple_list.h"
++#include "mcrl2/utilities/execution_timer.h"
+ 
+ #include <cstddef>   // for std::size_t
+ 
+@@ -4948,10 +4949,13 @@ void bisimulation_reduce_dnj(LTS_TYPE& l, bool const branching = false,
+     }
+     // Line 2.1: Find tau-SCCs and contract each of them to a single state
+     const std::clock_t start_SCC=std::clock();
++    mcrl2::utilities::execution_timer timer;
+     // mCRL2log(log::verbose) << "Start SCC\n";
+     if (branching)
+     {
++        timer.start("preprocess");
+         scc_reduce(l, preserve_divergence);
++        timer.finish("preprocess");
+         // If only 1 state remains after this contraction, we are already
+         // finished because scc_reduce() also removes duplicated transitions.
+         if (1 >= l.num_states())
+@@ -4963,8 +4967,11 @@ void bisimulation_reduce_dnj(LTS_TYPE& l, bool const branching = false,
+     // are no taus, this will automatically yield strong bisimulation.
+     const std::clock_t start_part=std::clock();
+     // mCRL2log(log::verbose) << "Start Partitioning\n";
++    timer.start("reduction");
+     bisim_partitioner_dnj<LTS_TYPE> bisim_part(l, branching,
+-                                                          preserve_divergence);
++                                                          preserve_divergence);   
++    timer.finish("reduction");
++    timer.report();
+ 
+     // Assign the reduced LTS
+     const std::clock_t end_part=std::clock();
+diff --git a/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_gj.h b/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_gj.h
+index 666b48e9b8..014cd7a14d 100644
+--- a/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_gj.h
++++ b/libraries/lts/include/mcrl2/lts/detail/liblts_bisim_gj.h
+@@ -31,6 +31,7 @@
+ #include "mcrl2/lts/detail/check_complexity.h"
+ #include "mcrl2/lts/detail/fixed_vector.h"
+ #include "mcrl2/lts/detail/simple_list.h"
++#include "mcrl2/utilities/execution_timer.h"
+ #define linked_list simple_list
+ 
+ namespace mcrl2::lts::detail
+@@ -6750,17 +6751,23 @@ void bisimulation_reduce_gj(LTS_TYPE& l, const bool branching = false,
+     // Algorithm 1, Line 1.1: Find tau-SCCs and contract each of them to a
+     // single state
+     const std::clock_t start_SCC=std::clock();
++    mcrl2::utilities::execution_timer timer;
+     // mCRL2log(log::verbose) << "Start SCC\n";
+     if (branching)
+     {
++        timer.start("preprocess");
+         scc_reduce(l, preserve_divergence);
++        timer.finish("preprocess");
+     }
+ 
+     // Now apply the branching bisimulation reduction algorithm.  If there
+     // are no taus, this will automatically yield strong bisimulation.
+     const std::clock_t start_part=std::clock();
+     // mCRL2log(log::debug) << "Start Partitioning\n";
++    timer.start("reduction");
+     bisim_partitioner_gj<LTS_TYPE> bisim_part(l,branching,preserve_divergence);
++    timer.finish("reduction");
++    timer.report();
+ 
+     // Assign the reduced LTS
+     const std::clock_t end_part=std::clock();
+diff --git a/libraries/lts/include/mcrl2/lts/sigref.h b/libraries/lts/include/mcrl2/lts/sigref.h
+index f45d4ef9c2..37c31a7b0b 100644
+--- a/libraries/lts/include/mcrl2/lts/sigref.h
++++ b/libraries/lts/include/mcrl2/lts/sigref.h
+@@ -15,6 +15,7 @@
+ #define MCRL2_LTS_SIGREF_H
+ 
+ #include "mcrl2/lts/lts_utilities.h"
++#include "mcrl2/utilities/execution_timer.h"
+ 
+ namespace mcrl2::lts
+ {
+@@ -466,7 +467,12 @@ public:
+   {
+     // No need for state labels in the reduced LTS.
+     m_lts.clear_state_labels();
++
++    mcrl2::utilities::execution_timer timer;
++    timer.start("reduction");
+     compute_partition();
++    timer.finish("reduction");
++    timer.report();
+     quotient();
+   }
+ };
+diff --git a/tools/release/ltsconvert/ltsconvert.cpp b/tools/release/ltsconvert/ltsconvert.cpp
+index d3781da83a..7844dc32a0 100644
+--- a/tools/release/ltsconvert/ltsconvert.cpp
++++ b/tools/release/ltsconvert/ltsconvert.cpp
+@@ -201,9 +201,7 @@ class ltsconvert_tool : public input_output_tool
+         {
+           mCRL2log(verbose) << "Reducing LTS (modulo " <<  description(tool_options.equivalence) << ")..." << std::endl;
+           mCRL2log(verbose) << "Before reduction: " << l.num_states() << " states and " << l.num_transitions() << " transitions." << std::endl;
+-          timer().start("reduction");
+           reduce(l,tool_options.equivalence);
+-          timer().finish("reduction");
+           mCRL2log(verbose) << "After reduction: " << l.num_states() << " states and " << l.num_transitions() << " transitions." << std::endl;
+         }
+       }
