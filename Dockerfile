@@ -44,7 +44,7 @@ ARG THREADS=8
 RUN cd /root/mCRL2/build && make -j${THREADS} ltsconvert ltscompare ltsinfo
 
 # Build ltsmin from source
-COPY ./ltsmin /root/ltsmin/
+COPY --chmod=777 ./ltsmin /root/ltsmin/
 
 # Build the ltsmin toolset, we create an empty .git directory for the build system to be happy
 RUN cd /root/ltsmin/ \
