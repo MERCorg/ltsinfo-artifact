@@ -20,3 +20,9 @@ image, after which the self-contained docker can be built using:
 ```bash
 docker save ltsinfo_artifact -o ltsinfo_artifact.tar
 ```
+
+The artifact should contain `README.md`, `Dockerfile` and `.dockerignore` files,
+the `ltsinfo`, `ltsmin`, and `mCRL2` source code, the `scripts/` directory, and
+the `lts/` directory with the mCRL2 case LTSs (in .aut format). An empty
+`results/` directory should also be present to store the output of the
+experiments.
