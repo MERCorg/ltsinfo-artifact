@@ -6,7 +6,7 @@ This is the artifact for the TACAS 2026 paper.
 
 The artifact is provided on Zenodo and can be downloaded from the following link:
 
-  > 10.5281/zenodo.17858373
+  > https://doi.org/10.5281/zenodo.17858373
 
 The `artifact.zip` includes a Dockerfile, which requires
 [Docker](https://www.docker.com/) to be installed. The image builds `mCRL2`,
